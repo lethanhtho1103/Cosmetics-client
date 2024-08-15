@@ -6,6 +6,7 @@ const publicRoutes = [
   {
     path: '/',
     component: Home,
+    isLogin: true,
   },
   {
     path: '/login',

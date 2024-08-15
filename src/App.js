@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { Fragment } from 'react';
 function App() {
+  const isLogIn = true; // thay isAdmin bằng user_id đã đăng nhập
   return (
     <Router>
       <div className="App">
@@ -17,9 +18,13 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  <LayOut>
-                    <Page />
-                  </LayOut>
+                  route.isLogin && !isLogIn ? (
+                    <Navigate to="/login" replace />
+                  ) : (
+                    <LayOut>
+                      <Page />
+                    </LayOut>
+                  )
                 }
               />
             );

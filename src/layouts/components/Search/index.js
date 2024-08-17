@@ -93,7 +93,7 @@ export default function Search() {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Search"
+          placeholder="Tìm kiếm sản phẩm..."
           InputProps={{
             ...params.InputProps,
             startAdornment: (

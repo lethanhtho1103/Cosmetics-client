@@ -3,13 +3,11 @@
 // @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
 
 :root {
-  --primary-color: #98c5e9;
+  --primary-color: #e67e23;
   --text-color: #001838;
   --background-color: #f1f4f6;
 
-  --default-layout-header-high: 80px;
-  --default-layout-width: 1150px;
-  --default-layout-horizontal-spacer: 60px;
+  --default-layout-max-high: 1320px;
 }
 
 * {

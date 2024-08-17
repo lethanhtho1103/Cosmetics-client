@@ -25,7 +25,7 @@
     .header-content {
       margin-left: auto;
       margin-right: auto;
-      max-width: 1320px;
+      max-width: var(--default-layout-max-high);
       padding: 13px 20px;
       height: 94px;
       width: auto;
@@ -83,6 +83,111 @@
   }
   .nav-sections {
     background: #fef1e6;
-    height: 48px;
+    .magemenu-menu {
+      max-width: var(--default-layout-max-high);
+      margin-left: auto;
+      margin-right: auto;
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      .megamenu-items {
+        position: relative;
+        flex: 1;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        list-style: none;
+        .megamenu-item {
+          // position: relative;
+          padding: 12px 0;
+          font-weight: 500;
+          text-transform: capitalize;
+          a {
+            text-decoration: none;
+            padding: 6px 5px;
+            background: 0 0;
+            color: #190c01;
+            font-weight: 500;
+            line-height: 1.5;
+          }
+          .submenu-content {
+            display: none;
+            margin: 8px 5px 0;
+            width: calc(100% - 10px);
+            padding: 0;
+            border-radius: 0 0 8px 8px;
+            box-shadow: none;
+            border: 1px solid;
+            border-top: none;
+            border-color: #f0efed !important;
+            position: absolute;
+            width: 100%;
+            min-height: 240px;
+            top: 40px;
+            left: 0;
+            margin: 8px 5px 0;
+            // padding-top: 8px;
+            background-color: #fff;
+            z-index: 1000;
+            overflow: hidden;
+            .block-list {
+              position: relative;
+              padding: 10px;
+              display: flex;
+              flex-wrap: wrap;
+              width: 100%;
+              .block-item {
+                min-width: 150px;
+                max-width: 220px;
+                color: #190c01;
+                font-weight: 500;
+                padding: 10px;
+                .category-link {
+                  margin-bottom: 12px !important;
+                  a {
+                    padding: 0;
+                    color: #1b1a19;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    font-size: 13px;
+                    line-height: 1.5;
+                  }
+                }
+                .megamenu-sub-items {
+                  padding: 0;
+                  margin: 0;
+                  list-style: none;
+                  .megamenu-sub-item {
+                    font-size: 12px;
+                    line-height: 1.5;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    a {
+                      padding: 0;
+                      display: inline-block;
+                      text-decoration: none;
+                      cursor: pointer;
+                      color: #545453;
+                      &:hover {
+                        color: var(--primary-color);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          &:hover .submenu-content {
+            display: block;
+          }
+          &:hover a {
+            color: var(--primary-color);
+          }
+        }
+      }
+    }
   }
 }

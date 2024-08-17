@@ -1,0 +1,88 @@
+.wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 101;
+  .page-header {
+    background: #f9ae6c linear-gradient(279deg, #f7933b 0%, #f9ae6c 100%);
+    color: #fafafa;
+    border: 0;
+    position: relative;
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: calc((100% - 1320px) / 2 + 20px + 246px);
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-right: 1.5px solid #fde4ce;
+      background-color: #f6831f;
+      background: #f6831f -o-linear-gradient(315deg, #f26522 0%, #fa8825 59.9%, #f2752e 100%);
+      background: #f6831f linear-gradient(135deg, #f26522 0%, #fa8825 59.9%, #f2752e 100%);
+
+      border-radius: 0 60px 60px 0;
+    }
+    .header-content {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 1320px;
+      padding: 13px 20px;
+      height: 94px;
+      width: auto;
+      color: #fafafa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .logo {
+        font-size: 28px;
+        color: #fff;
+        text-decoration: none;
+      }
+      .welcome,
+      .cart {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 40px;
+        padding: 5px 16px;
+        color: #fafafa;
+        font-size: 14px;
+        background: #ec7e1d;
+        border-radius: 50px;
+        font-weight: 500;
+        text-decoration: none;
+        margin-left: 20px;
+        .not-logged-in {
+          color: #fafafa;
+          a {
+            color: inherit;
+            font: inherit;
+            text-decoration: none;
+          }
+        }
+        .content {
+          .text {
+            display: block;
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            clip: auto;
+            overflow: visible;
+            text-transform: uppercase;
+            font-size: 8px;
+            font-weight: 700;
+            line-height: 1.5;
+            letter-spacing: 0.08px;
+            opacity: 0.8;
+            color: inherit;
+          }
+        }
+      }
+    }
+  }
+  .nav-sections {
+    background: #fef1e6;
+    height: 48px;
+  }
+}

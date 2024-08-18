@@ -18,9 +18,9 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           fontSize: '0.875rem',
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.light,
-          },
+          // '.MuiOutlinedInput-notchedOutline': {
+          //   borderColor: theme.palette.primary.light,
+          // },
           // '&:hover': {
           //   '.MuiOutlinedInput-notchedOutline': {
           //     borderColor: '#cccac6',

@@ -33,10 +33,10 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const logOut = async (dispatch, id, navigate, accessToken, axiosJWT) => {
+export const logOut = async (dispatch, id, navigate, accessToken) => {
   dispatch(logOutStart());
   try {
-    await axiosJWT.post('/v1/auth/logout', id, {
+    await axios.post('/api/authentication/logout', id, {
       headers: { token: `Bearer ${accessToken}` },
     });
     dispatch(logOutSuccess());

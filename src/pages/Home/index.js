@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import UserLayout from '~/layouts/UserLayout';
-import Toast from '../Toast';
 
 function Home() {
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state.auth.login?.currentUser?.props);
 
   return (
     <UserLayout>
-      {user && <Toast severity={'success'} message={'Đăng nhập thành công.'} />}
-      <h1>Home page {user.username}</h1>
+      <h1>Home page {user?.username}</h1>
     </UserLayout>
   );
 }

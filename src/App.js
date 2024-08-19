@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { publicRoutes } from './routes';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 function App() {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser?.props);
 
   return (
     <Router>
@@ -15,9 +15,11 @@ function App() {
               LayOut = route.layout;
             }
             const Page = route.component;
+
             if (currentUser && (route.path === '/login' || route.path === '/register')) {
               return <Route key={index} path={route.path} element={<Navigate to="/" replace />} />;
             }
+
             return (
               <Route
                 key={index}

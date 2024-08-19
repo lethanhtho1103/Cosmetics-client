@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
-import { Button, FormControl, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, TextField } from '@mui/material';
 import UserLayout from '~/layouts/UserLayout';
-import Toast from '../Toast';
-import { loginUser } from '~/redux/apiRequest';
 import { useDispatch } from 'react-redux';
 
 import './Login.scss';
+
+import authService from '~/services/authService';
 
 function LoginUser() {
   const btnSubmitRef = useRef();
@@ -21,6 +21,8 @@ function LoginUser() {
   const [errClassPass, SetErrClassPass] = useState(false);
   const [errMessage, setErrMessage] = useState('');
 
+  const [isLoader, setIsLoader] = useState(false);
+
   const handleChange = (e, type) => {
     if (type === 'user') {
       setEmail(e.target.value);
@@ -32,6 +34,7 @@ function LoginUser() {
   };
 
   const handleSubmit = async () => {
+    // eslint-disable-next-line
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailInput) {
       setErrMessage('Vui lòng nhập địa chỉ email.');
@@ -52,14 +55,16 @@ function LoginUser() {
       passRef.current.focus();
       return;
     }
+
     try {
-      const newUser = {
-        email: emailInput,
-        password: passInput,
-      };
-      loginUser(newUser, dispatch, navigate);
+      setIsLoader(true);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await authService.login(emailInput, passInput, dispatch);
+      setIsLoader(false);
+      navigate('/');
     } catch (error) {
-      if (error.response && error.response.status === 403) {
+      setIsLoader(false);
+      if (error.response) {
         setErrClass(true);
         setErrClassEmail(true);
         SetErrClassPass(true);
@@ -79,6 +84,7 @@ function LoginUser() {
         <section className="page-content">
           <div className="page-title">
             <h1 className="title">Đăng nhập</h1>
+            {isLoader && <CircularProgress sx={{ position: 'absolute', zIndex: 3000 }} />}
           </div>
           {errClass && (
             <div className="notification-box invalid">
@@ -133,6 +139,7 @@ function LoginUser() {
               </Button>
             </div>
           </form>
+
           <div className="notification-box">
             <p className="notification-box__text">
               <strong>

@@ -19,7 +19,7 @@ export default function Toast({ severity, message, duration = 3000 }) {
         open={open}
         autoHideDuration={duration}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert onClose={handleClose} severity={severity} variant="filled" sx={{ width: '100%' }}>
           {message}

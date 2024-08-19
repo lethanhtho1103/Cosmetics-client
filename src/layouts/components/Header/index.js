@@ -1,5 +1,5 @@
 import './Header.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Search from '../Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useState } from 'react';
@@ -16,12 +16,17 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Container from '@mui/material/Container';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
+import authService from '~/services/authService';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = currentUser?.accessToken;
+  const id = currentUser?.props?._id;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -30,13 +35,21 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    try {
+      authService.logOut(dispatch, id, navigate, accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <Container disableGutters maxWidth={false} className="wrapper">
       <header className="page-header">
         <div className="header-content">
           <Box sx={{ zIndex: '102' }}>
             <Link to="/" className="logo">
-              TT-SHOP
+              ORANGE
             </Link>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -54,7 +67,7 @@ function Header() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                       >
-                        <Avatar src={`${baseUrl}/${currentUser.avatar}`} sx={{ width: 32, height: 32 }} />
+                        <Avatar src={`${baseUrl}/${currentUser?.props?.avatar}`} sx={{ width: 32, height: 32 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -111,14 +124,14 @@ function Header() {
                       </ListItemIcon>
                       Settings
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={handleLogout}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
                       </ListItemIcon>
                       Logout
                     </MenuItem>
                   </Menu>
-                  <div className="logged-in">Xin chào, {currentUser?.username}</div>
+                  <div className="logged-in">Xin chào, {currentUser?.props?.username}</div>
                 </>
               ) : (
                 <>

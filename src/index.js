@@ -6,6 +6,9 @@ import GlobalStyles from './components/GlobalStyles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { ThemeProvider } from '@emotion/react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,7 +16,12 @@ root.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalStyles>
-        <App />
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
+        ,
       </GlobalStyles>
     </ThemeProvider>
   </React.StrictMode>,

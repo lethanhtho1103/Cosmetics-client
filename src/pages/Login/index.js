@@ -1,23 +1,24 @@
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.scss';
-
-import { useCallback, useEffect, useRef, useState } from 'react';
-// import { useDispatch } from 'react-redux';
-import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
+import { useRef, useState } from 'react';
+import { Button, FormControl, TextField } from '@mui/material';
 import UserLayout from '~/layouts/UserLayout';
+import Toast from '../Toast';
+import { loginUser } from '~/redux/apiRequest';
+import { useDispatch } from 'react-redux';
+
+import './Login.scss';
 
 function LoginUser() {
   const btnSubmitRef = useRef();
   const emailRef = useRef();
   const passRef = useRef();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [emailInput, setEmail] = useState('');
   const [passInput, setPassInput] = useState('');
   const [errClass, setErrClass] = useState(false);
   const [errClassEmail, setErrClassEmail] = useState(false);
   const [errClassPass, SetErrClassPass] = useState(false);
-  const [isLoader, setIsLoader] = useState(false);
   const [errMessage, setErrMessage] = useState('');
 
   const handleChange = (e, type) => {
@@ -52,27 +53,21 @@ function LoginUser() {
       return;
     }
     try {
-      setIsLoader(true);
-      // const response = await userService.login(emailInput, passInput);
-      // Xử lý dữ liệu khi thành công
-      let isLoader = setTimeout(() => {
-        setIsLoader(false);
-        // saveUserLogin(response);
-        setErrClass(false);
-        clearTimeout(isLoader);
-      }, 500);
+      const newUser = {
+        email: emailInput,
+        password: passInput,
+      };
+      loginUser(newUser, dispatch, navigate);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 403) {
         setErrClass(true);
         setErrClassEmail(true);
         SetErrClassPass(true);
         setEmail('');
         setPassInput('');
-        setErrMessage('Invalid credentials.(Ref: EC4)');
+        setErrMessage('Email hoặc mật khẩu không đúng.');
         emailRef.current.focus();
-        setIsLoader(false);
       } else {
-        // Xử lý các mã lỗi khác
         console.error('Other error:', error);
       }
     }
@@ -80,14 +75,6 @@ function LoginUser() {
 
   return (
     <UserLayout>
-      {/* {isLoader && <Loader />} */}
-      {/* <nav className='global-nav'>
-        <div className='logo-wrapper'>
-          <Link to="/">
-            <img src={logo} alt="logo" />
-          </Link>
-        </div>
-      </nav> */}
       <main className="container page-wrapper">
         <section className="page-content">
           <div className="page-title">
@@ -146,7 +133,6 @@ function LoginUser() {
               </Button>
             </div>
           </form>
-
           <div className="notification-box">
             <p className="notification-box__text">
               <strong>

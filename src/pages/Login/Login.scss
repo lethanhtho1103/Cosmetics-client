@@ -278,12 +278,12 @@
         display: flex;
         align-items: center;
         text-decoration: none;
-        color: #fff; /* Đảm bảo text màu trắng cho dễ đọc */
+        color: #fff;
         font-weight: 700;
         font-size: 14px;
 
         span {
-          margin-left: 8px; /* Tăng khoảng cách giữa icon và text */
+          margin-left: 6px;
           font-size: 14px;
         }
       }
@@ -298,8 +298,14 @@
         background-color: #d14b36;
       }
 
+      img {
+        height: 24px;
+        width: 24px;
+      }
+
       a {
         color: #fff;
+        padding: 0 4px;
       }
     }
   }

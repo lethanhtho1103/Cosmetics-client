@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, CircularProgress, FormControl, TextField } from '@mui/material';
 import UserLayout from '~/layouts/UserLayout';
 import { useDispatch } from 'react-redux';
@@ -9,6 +9,7 @@ import './Login.scss';
 
 import authService from '~/services/authService';
 import { loginSuccess } from '~/redux/authSlice';
+import axios from '~/axios';
 
 function LoginUser() {
   const btnSubmitRef = useRef();
@@ -24,6 +25,8 @@ function LoginUser() {
   const [errMessage, setErrMessage] = useState('');
 
   const [isLoader, setIsLoader] = useState(false);
+
+  const [tokenProcessed, setTokenProcessed] = useState(false);
 
   const handleChange = (e, type) => {
     if (type === 'user') {
@@ -80,6 +83,35 @@ function LoginUser() {
       }
     }
   };
+
+  const handleFacebookLogin = async () => {
+    try {
+      const response = await axios.get('/auth/facebook');
+      window.location.href = response.data.redirectUrl;
+    } catch (error) {
+      console.error('Error during Facebook login:', error);
+    }
+  };
+
+  const handleFacebookCallback = async (code) => {
+    try {
+      await axios.get(`/auth/facebook/callback?code=${code}`);
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error during Facebook callback:', error);
+      window.location.href = '/login';
+    }
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code && !tokenProcessed) {
+      handleFacebookCallback(code);
+      setTokenProcessed(true);
+    }
+  }, [tokenProcessed]);
 
   return (
     <UserLayout>
@@ -164,8 +196,9 @@ function LoginUser() {
                   <span>Google</span>
                 </Link>
               </div>
-              <div className="facebook">
-                <Link to={'/google'}>
+
+              <div className="facebook" onClick={handleFacebookLogin}>
+                <Link to="http://localhost:8000/auth/facebook">
                   <FacebookIcon />
                   <span>Facebook</span>
                 </Link>

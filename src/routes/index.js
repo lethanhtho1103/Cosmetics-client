@@ -1,12 +1,13 @@
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
+import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
 import Register from '~/pages/Register';
 
 const publicRoutes = [
   {
     path: '/',
     component: Home,
-    isLogin: true,
+    // isLogin: true,
   },
   {
     path: '/login',
@@ -15,6 +16,10 @@ const publicRoutes = [
   {
     path: '/register',
     component: Register,
+  },
+  {
+    path: '/oauth-callback/:token',
+    component: OAuthCallback,
   },
 ];
 

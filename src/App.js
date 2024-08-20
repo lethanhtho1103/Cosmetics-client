@@ -3,7 +3,7 @@ import { publicRoutes } from './routes';
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 function App() {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser?.props);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
 
   return (
     <Router>

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import UserLayout from '~/layouts/UserLayout';
 
 function Home() {
-  const user = useSelector((state) => state.auth.login?.currentUser?.props);
+  const user = useSelector((state) => state.auth.login?.currentUser?.data);
 
   return (
     <UserLayout>

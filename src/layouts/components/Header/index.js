@@ -19,12 +19,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
 import authService from '~/services/authService';
+import { logOutSuccess } from '~/redux/authSlice';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  console.log(currentUser);
   const accessToken = currentUser?.accessToken;
-  const id = currentUser?.props?._id;
+  const id = currentUser?.data?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,7 +40,11 @@ function Header() {
 
   const handleLogout = () => {
     try {
-      authService.logOut(dispatch, id, navigate, accessToken);
+      if (accessToken) {
+        authService.logOut(dispatch, id, navigate, accessToken);
+      } else {
+        dispatch(logOutSuccess());
+      }
     } catch (error) {
       console.error(error);
     }
@@ -67,7 +73,14 @@ function Header() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                       >
-                        <Avatar src={`${baseUrl}/${currentUser?.props?.avatar}`} sx={{ width: 32, height: 32 }} />
+                        <Avatar
+                          src={
+                            currentUser?.data?.avatar.startsWith('http')
+                              ? currentUser?.data?.avatar
+                              : `${baseUrl}/${currentUser?.data?.avatar}`
+                          }
+                          sx={{ width: 32, height: 32 }}
+                        />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -131,7 +144,7 @@ function Header() {
                       Logout
                     </MenuItem>
                   </Menu>
-                  <div className="logged-in">Xin chào, {currentUser?.props?.username}</div>
+                  <div className="logged-in">Xin chào, {currentUser?.data?.username}</div>
                 </>
               ) : (
                 <>

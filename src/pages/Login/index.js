@@ -3,10 +3,12 @@ import { useRef, useState } from 'react';
 import { Button, CircularProgress, FormControl, TextField } from '@mui/material';
 import UserLayout from '~/layouts/UserLayout';
 import { useDispatch } from 'react-redux';
-
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GoogleIcon from '@mui/icons-material/Google';
 import './Login.scss';
 
 import authService from '~/services/authService';
+import { loginSuccess } from '~/redux/authSlice';
 
 function LoginUser() {
   const btnSubmitRef = useRef();
@@ -59,7 +61,8 @@ function LoginUser() {
     try {
       setIsLoader(true);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      await authService.login(emailInput, passInput, dispatch);
+      const res = await authService.login(emailInput, passInput);
+      dispatch(loginSuccess(res));
       setIsLoader(false);
       navigate('/');
     } catch (error) {
@@ -84,6 +87,10 @@ function LoginUser() {
         <section className="page-content">
           <div className="page-title">
             <h1 className="title">Đăng nhập</h1>
+            <div className="register-link">
+              Bạn chưa có tài khoản?
+              <Link to="/register">Đăng ký ngay</Link>
+            </div>
             {isLoader && <CircularProgress sx={{ position: 'absolute', zIndex: 3000 }} />}
           </div>
           {errClass && (
@@ -139,7 +146,6 @@ function LoginUser() {
               </Button>
             </div>
           </form>
-
           <div className="notification-box">
             <p className="notification-box__text">
               <strong>
@@ -149,9 +155,22 @@ function LoginUser() {
             </p>
           </div>
 
-          <div className="register-link">
-            Bạn chưa có tài khoản?
-            <Link to="/register">Đăng ký ngay</Link>
+          <div className="social-login">
+            <div className="label">Hoặc đăng nhập bằng</div>
+            <div className="social">
+              <div className="google">
+                <Link to="http://localhost:8000/auth/google">
+                  <GoogleIcon />
+                  <span>Google</span>
+                </Link>
+              </div>
+              <div className="facebook">
+                <Link to={'/google'}>
+                  <FacebookIcon />
+                  <span>Facebook</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>

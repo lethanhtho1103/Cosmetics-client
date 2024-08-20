@@ -211,8 +211,7 @@
 }
 .register-link {
   margin: auto 0 0;
-  padding-top: 20px;
-  border-top: 1px solid var(--primary-color);
+  padding-top: 8px;
   font-size: 16px;
   line-height: 22px;
   font-weight: bold;
@@ -231,4 +230,77 @@
 }
 .register-link a:hover {
   text-decoration: underline;
+}
+
+.social-login {
+  position: relative;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .label {
+    display: block;
+    position: absolute;
+    top: -20px;
+    z-index: 10;
+    padding: 6px 12px;
+    background-color: var(--background-color, #fff); /* Thêm nền để nhãn nổi bật */
+    font-size: 14px;
+    color: var(--primary-color);
+    border-radius: 12px;
+  }
+
+  .social {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    .google,
+    .facebook {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      padding: 8px 16px; /* Tăng kích thước padding cho nút lớn hơn */
+      background-color: #007aff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng cho nút */
+      transition: background-color 0.3s ease; /* Thêm hiệu ứng hover */
+
+      &:hover {
+        background-color: #005bb5;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #fff; /* Đảm bảo text màu trắng cho dễ đọc */
+        font-weight: 700;
+        font-size: 14px;
+
+        span {
+          margin-left: 8px; /* Tăng khoảng cách giữa icon và text */
+          font-size: 14px;
+        }
+      }
+    }
+
+    .google {
+      background-color: #df4a32;
+      // border: 1px solid #333;
+      color: #fff;
+
+      &:hover {
+        background-color: #d14b36;
+      }
+
+      a {
+        color: #fff;
+      }
+    }
+  }
 }

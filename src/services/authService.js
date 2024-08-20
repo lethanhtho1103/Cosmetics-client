@@ -7,7 +7,7 @@ const authService = {
       email: email,
       password: password,
     });
-    dispatch(loginSuccess(res.data));
+    return res.data;
   },
   async logOut(dispatch, id, navigate, accessToken) {
     await axios.post('/api/authentication/logout', id, {

@@ -1,0 +1,150 @@
+.wrap {
+  margin-top: 10px;
+  padding: 12px 0 4px 0;
+  background-color: #fff; // Updated background color to match header
+  border-top: 1px solid #cccac6;
+
+  .bor1 {
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12); // Match header's border style
+  }
+
+  .title {
+    font-size: 40px; // Adjust to match the text size
+    text-align: center; // Center the text
+    position: relative;
+    padding: 10px 0;
+    display: inline-block; // Ensure it wraps tightly around the text
+    z-index: 10 !important;
+    width: 50%;
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      border-radius: 0 0 1000px 1000px;
+      z-index: -1;
+    }
+  }
+
+  .decs {
+    max-width: 400px;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: justify;
+    color: #545453;
+    margin-top: 28px;
+  }
+
+  .title1 {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    a {
+      padding: 8px;
+      background-color: #555; // Updated background color for consistency
+      border-radius: 4px;
+      margin-right: 12px;
+      transition: 0.3s;
+
+      svg {
+        color: #fbad15;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2); // Updated hover effect
+        color: #000;
+        animation: scaleM 0.3s ease-in-out;
+        cursor: pointer;
+      }
+    }
+
+    @keyframes scaleM {
+      50% {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .title2 {
+    font-size: 20px;
+    color: #1b1a19;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .list1 {
+    font-size: 14px;
+    color: #000; // Updated text color
+    margin-top: 20px;
+    color: #545453;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    li {
+      margin-bottom: 8px;
+      cursor: pointer;
+
+      &:hover {
+        color: #fbad15;
+      }
+    }
+  }
+
+  .list2 {
+    padding: 0;
+    list-style: none;
+    li {
+      margin-bottom: 22px;
+
+      .list2-wrap {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        color: #000;
+
+        .title3 {
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .list2-icon {
+          padding: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          background-color: #555; // Updated background color
+          border-radius: 4px;
+          margin-right: 14px;
+
+          svg {
+            color: #fbad15;
+          }
+        }
+
+        span {
+          font-size: 14px;
+          line-height: 18px;
+          font-weight: 400;
+          color: #545453;
+        }
+      }
+    }
+  }
+}

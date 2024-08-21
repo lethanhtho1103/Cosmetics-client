@@ -24,7 +24,6 @@ root.render(
           <App />
         </PersistGate>
       </Provider>
-      ,
     </GlobalStyles>
   </ThemeProvider>,
   // </React.StrictMode>,

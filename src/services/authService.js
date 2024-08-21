@@ -1,12 +1,16 @@
 import axios from '~/axios';
-import { loginSuccess, logOutSuccess } from '~/redux/authSlice';
+import { logOutSuccess } from '~/redux/authSlice';
 
 const authService = {
-  async login(email, password, dispatch) {
+  async login(email, password) {
     const res = await axios.post('/api/authentication/login-user', {
-      email: email,
-      password: password,
+      email,
+      password,
     });
+    return res.data;
+  },
+  async register(formData) {
+    const res = await axios.post('/api/authentication/register', formData);
     return res.data;
   },
   async logOut(dispatch, id, navigate, accessToken) {

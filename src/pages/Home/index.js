@@ -4,6 +4,8 @@ import ImageCarousel from '~/components/ImageCarousel';
 import UserLayout from '~/layouts/UserLayout';
 import img5 from '~/assets/image/img5.jpg';
 import img6 from '~/assets/image/img6.jpg';
+import PromotionTabs from '~/components/PromotionTabs';
+import './Home.scss';
 
 function Home() {
   return (
@@ -34,6 +36,11 @@ function Home() {
             src={img6}
             alt=""
           />
+        </Box>
+      </Box>
+      <Box className="home-flashSale-block">
+        <Box className="row-full-width-inner">
+          <PromotionTabs />
         </Box>
       </Box>
     </UserLayout>

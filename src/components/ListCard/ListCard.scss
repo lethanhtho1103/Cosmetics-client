@@ -1,0 +1,103 @@
+.product-items {
+  display: flex;
+  flex-wrap: wrap;
+  //   margin: 0 -8px -16px; /* Adjust the margins to account for spacing */
+
+  .product-item {
+    max-width: calc(20% - 13px); /* Set the width to 20% minus the gap */
+    margin: 0 8px 16px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+
+    &:first-child,
+    &:nth-child(5n + 1) {
+      margin-left: 0;
+    }
+    &:nth-child(5n) {
+      margin-right: 0; /* Remove the right margin for the last item in each row */
+    }
+  }
+  .product-item-brand-link {
+    margin-bottom: 6px;
+    height: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    text-decoration: none;
+    font-weight: 700;
+    color: #545453;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .product-item-name-link {
+    margin: 0 0 6px;
+    font-weight: 700;
+    height: 40px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #1b1a19;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 20px;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+  .product-item-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    .number-rating {
+      font-size: 13px;
+      margin-left: 4px;
+      color: #faaf00;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+  }
+
+  .price-box {
+    display: flex;
+    align-items: center;
+    word-spacing: -3px;
+
+    .special-price {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #f04438;
+      margin-right: 6px;
+      font-weight: 700;
+    }
+    .old-price {
+      font-weight: 500;
+      color: #999794;
+      font-size: 12px;
+      line-height: 1.5;
+      text-decoration: line-through;
+      margin-right: 6px;
+    }
+    .percent-discount {
+      display: flex;
+      align-items: center;
+      background-color: #f04438;
+      color: #fff;
+      font-size: 10px;
+      line-height: 1.6;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-align: center;
+      span {
+        margin-top: -4px;
+      }
+    }
+  }
+}

@@ -113,6 +113,12 @@
             font-weight: 500;
             line-height: 1.5;
           }
+          &:first-child {
+            a {
+              padding-left: 0 !important;
+            }
+          }
+
           .submenu-content {
             display: none;
             margin: 8px 5px 0;

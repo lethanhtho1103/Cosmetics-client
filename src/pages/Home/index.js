@@ -143,8 +143,6 @@ function Home() {
           <PhoneIcon sx={{ color: '#fff' }} />
         </Fab>
       </Tooltip>
-
-      {/* Phone Number Display */}
       {showPhoneNumber && (
         <Typography
           variant="h6"

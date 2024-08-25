@@ -1,6 +1,7 @@
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
+import ProductDetail from '~/pages/ProductDetail/idnex';
 import Register from '~/pages/Register';
 
 const publicRoutes = [
@@ -8,6 +9,10 @@ const publicRoutes = [
     path: '/',
     component: Home,
     // isLogin: true,
+  },
+  {
+    path: '/:nameProduct',
+    component: ProductDetail,
   },
   {
     path: '/login',

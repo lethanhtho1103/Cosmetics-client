@@ -1,0 +1,263 @@
+.container {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fafafa 100%);
+  max-width: 100% !important;
+}
+
+.page-main {
+  max-width: var(--default-layout-max-high);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.product-detail-paper {
+  padding: 16px 0;
+
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.product-image {
+  width: 100%;
+}
+
+.product-image-content {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.price-box {
+  display: flex;
+  align-items: center;
+  word-spacing: -3px;
+
+  .special-price {
+    font-size: 24px;
+    line-height: 1.5;
+
+    font-weight: 700;
+  }
+  .old-price {
+    font-weight: 500;
+    color: #999794;
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: line-through;
+    margin-left: 12px;
+  }
+  .percent-discount {
+    margin-left: 12px;
+
+    display: flex;
+    align-items: center;
+    background-color: #f04438;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.product-name {
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  text-transform: capitalize;
+  margin-bottom: 16px !important;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.rating-stars {
+  margin-right: 4px;
+}
+
+.rating-value {
+  font-weight: 700 !important;
+  color: #f7bf09;
+  margin-right: 16px !important;
+}
+
+.rating-count {
+  margin-right: 16px !important;
+  color: #f6831f;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.product-brand {
+  margin-right: 16px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.5;
+  margin-right: 4px !important;
+  color: #999794;
+  strong {
+    color: #1b1a19;
+    text-decoration: underline;
+    font-size: 14px;
+  }
+}
+
+.product-price {
+  margin-bottom: 16px;
+}
+
+.product-description {
+  margin-bottom: 24px;
+}
+
+.product-specifications {
+  margin-bottom: 24px;
+}
+
+.product-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 20px;
+  padding: 2px 8px;
+  margin-right: 16px;
+}
+
+.quantity-value {
+  margin: 0 8px !important;
+}
+
+.add-to-cart-btn {
+  margin-right: 16px !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  padding: 6px 24px !important;
+  font-weight: 700;
+  text-transform: uppercase !important;
+}
+
+.cart-icon {
+  margin-right: 4px !important;
+}
+
+.buy-btn {
+  background-color: #f04438 !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  padding: 6px 20px !important;
+  text-transform: uppercase !important;
+}
+
+.customer-reviews-section {
+  padding: 24px;
+  margin-top: 32px;
+  box-shadow: none;
+  background-color: transparent;
+
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    .review-title {
+      font-weight: 700;
+      margin-right: 16px;
+    }
+
+    .review-rating {
+      display: flex;
+      align-items: center;
+      margin-top: -2px;
+
+      .rating-value {
+        font-weight: 700;
+        color: #f7bf09;
+        margin-right: 8px;
+      }
+
+      .total-reviews {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  .review-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .review-user {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .user-name {
+        margin-right: 16px;
+        font-weight: bold;
+      }
+
+      .user-rating {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .review-time {
+      color: #757575;
+      margin-bottom: 8px;
+    }
+
+    .review-comment {
+      margin-bottom: 16px;
+    }
+
+    .review-actions {
+      display: flex;
+      justify-content: flex-end;
+
+      .edit-button {
+        color: #303f9f;
+      }
+
+      .delete-button {
+        color: red;
+      }
+    }
+
+    .edit-review-form {
+      margin-top: 16px;
+
+      .rating-input {
+        margin-bottom: 16px;
+      }
+
+      .comment-input {
+        margin-bottom: 16px;
+      }
+
+      .save-button {
+        background-color: #3f51b5;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.comment-user {
+  box-shadow: 0px 0px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 12px !important;
+}

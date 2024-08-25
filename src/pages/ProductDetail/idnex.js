@@ -24,7 +24,8 @@ function ProductDetail() {
     name: 'Sữa Rửa Mặt Dịu Nhẹ Cho Da Nhạy Cảm Cetaphil Gentle Skin Cleanser 500Ml',
     price: '$199.99',
     brand: 'Cetaphil',
-    description: 'This is a detailed description of the product.',
+    description:
+      'Làn da dầu và mụn rất nhạy cảm nên cần được thiết kế một loại nước tẩy trang phù hợp. Với công nghệ Micellar, nước tẩy trang bí đao của CoCoon giúp làm sạch hiệu quả lớp trang điểm, bụi bẩn và dầu thừa, mang lại làn da sạch hoàn toàn và dịu nhẹ',
     specifications: {
       weight: '1kg',
       dimensions: '10x10x10 cm',
@@ -104,8 +105,16 @@ function ProductDetail() {
                   <Typography variant="body1" className="rating-count">
                     {totalReviews} Đánh giá
                   </Typography>
-                  <Typography variant="body1" className="product-brand">
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography className="product-brand">
+                    Xuất xứ: <strong>Hàn Quốc</strong>
+                  </Typography>
+                  <Typography className="product-brand">
                     Thương hiệu: <strong>{productDetails.brand}</strong>
+                  </Typography>
+                  <Typography className="product-brand">
+                    Hạn sử dụng: <strong>36 tháng</strong>
                   </Typography>
                 </Box>
                 <Box className="price-box">
@@ -117,7 +126,6 @@ function ProductDetail() {
                 <Typography variant="body1" paragraph className="product-description">
                   {productDetails.description}
                 </Typography>
-
                 <Box className="product-actions">
                   <Box className="quantity-selector">
                     <IconButton size="small" onClick={handleDecrementQuantity}>
@@ -152,7 +160,6 @@ function ProductDetail() {
               </Typography>
             </Box>
           </Box>
-
           <Box sx={{ pb: 2 }}>
             {productDetails.reviews.map((review, index) => (
               <Paper key={index} sx={{ p: 2, mb: 3, boxShadow: 1 }} className="comment-user">

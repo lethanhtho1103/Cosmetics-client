@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   word-spacing: -3px;
-
+  margin-bottom: 16px;
   .special-price {
     font-size: 24px;
     line-height: 1.5;
@@ -93,15 +93,15 @@
 
 .product-brand {
   margin-right: 16px !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.5;
-  margin-right: 4px !important;
+  margin-bottom: 16px !important;
   color: #999794;
+
   strong {
     color: #1b1a19;
-    text-decoration: underline;
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 

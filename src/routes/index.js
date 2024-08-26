@@ -1,3 +1,4 @@
+import Cart from '~/pages/Cart';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
@@ -11,8 +12,12 @@ const publicRoutes = [
     // isLogin: true,
   },
   {
-    path: '/:nameProduct',
+    path: 'product-detail/:nameProduct',
     component: ProductDetail,
+  },
+  {
+    path: '/cart',
+    component: Cart,
   },
   {
     path: '/login',

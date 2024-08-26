@@ -10,18 +10,29 @@ export default function CustomBreadcrumbs({ routes }) {
     const isLast = index === routes.length - 1;
 
     return isLast ? (
-      <Typography key={index} color="text.primary">
+      <Typography
+        sx={{ fontSize: '12px', textTransform: 'uppercase', marginTop: '4px', fontWeight: 500 }}
+        key={index}
+        color="inherit"
+      >
         {route.name}
       </Typography>
     ) : (
-      <Link underline="hover" key={index} color="inherit" component={RouterLink} to={route.path}>
+      <Link
+        sx={{ fontSize: '12px', textTransform: 'uppercase', fontWeight: 500 }}
+        underline="hover"
+        key={index}
+        color="text.primary"
+        component={RouterLink}
+        to={route.path}
+      >
         {route.name}
       </Link>
     );
   });
 
   return (
-    <Stack spacing={2} sx={{ maxWidth: '1320px', marginLeft: 'auto', marginRight: 'auto', padding: '12px 20px' }}>
+    <Stack sx={{ maxWidth: '1320px', marginLeft: 'auto', marginRight: 'auto', padding: '12px 20px' }}>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
         {breadcrumbs}
       </Breadcrumbs>

@@ -14,7 +14,7 @@ function ProductDetail() {
   const { nameProduct } = useParams();
   const userReview = true;
   const routes = [
-    { name: 'Home', path: '/' },
+    { name: 'Trang chủ', path: '/' },
     { name: nameProduct, path: '' },
   ];
 
@@ -85,8 +85,8 @@ function ProductDetail() {
 
   return (
     <UserLayout>
-      <Breadcrumbs routes={routes} />
       <Container disableGutters maxWidth={false} className="container">
+        <Breadcrumbs routes={routes} />
         <main className="page-main">
           <Paper className="product-detail-paper" sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
             <Grid container spacing={3}>
@@ -117,7 +117,7 @@ function ProductDetail() {
                     Hạn sử dụng: <strong>36 tháng</strong>
                   </Typography>
                 </Box>
-                <Box className="price-box">
+                <Box className="price-box-product">
                   <span className="special-price">140,000</span>₫<span className="old-price">199,000₫</span>
                   <span className="percent-discount">
                     <span>-</span>30%

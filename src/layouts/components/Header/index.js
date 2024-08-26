@@ -161,7 +161,7 @@ function Header() {
                 </>
               )}
             </Box>
-            <Link to="cart" className="cart">
+            <Link to="http://localhost:3000/cart" className="cart">
               <ShoppingCartIcon sx={{ marginRight: '8px' }} />
               <div className="content">
                 <div className="text">Giỏ hàng</div>

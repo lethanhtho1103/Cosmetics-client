@@ -2,7 +2,7 @@ import './Header.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -20,15 +20,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
 import authService from '~/services/authService';
 import { logOutSuccess } from '~/redux/authSlice';
+import shopService from '~/services/shopService';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  console.log(currentUser);
   const accessToken = currentUser?.accessToken;
   const id = currentUser?.data?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [shops, setShops] = useState([]);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -49,6 +51,15 @@ function Header() {
       console.error(error);
     }
   };
+  const getAllShops = async () => {
+    const res = await shopService.getAllShops();
+    setShops(res);
+  };
+
+  useEffect(() => {
+    getAllShops();
+  }, []);
+
   return (
     <Container disableGutters maxWidth={false} className="wrapper">
       <header className="page-header">
@@ -175,221 +186,29 @@ function Header() {
       <div className="nav-sections">
         <div className="magemenu-menu">
           <ul className="megamenu-items">
-            <li className="megamenu-item">
-              <div className="submenu-content">
-                <div className="block-list">
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="/#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="block-item">
-                    <div className="category-link">
-                      <Link to="#">Làm sạch cơ thể</Link>
-                    </div>
-                    <ul className="megamenu-sub-items">
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Sữa tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Xà phòng tắm</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Tẩy tế bào chết</Link>
-                      </li>
-                      <li className="megamenu-sub-item">
-                        <Link to="#">Nước rửa tay</Link>
-                      </li>
-                    </ul>
+            {shops.map((shop) => (
+              <li key={shop.id} className="megamenu-item">
+                <div className="submenu-content">
+                  <div className="block-list">
+                    {shop.Cosmetics.map((cosmetic, index) => (
+                      <div key={cosmetic.id} className="block-item">
+                        <div className="category-link">
+                          <Link to="#">{cosmetic.name}</Link>
+                        </div>
+                        <ul className="megamenu-sub-items">
+                          {cosmetic.categories.map((category) => (
+                            <li key={category.id} className="megamenu-sub-item">
+                              <Link to="/#">{category.name}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-              <Link to="#">Chăm sóc da mặt</Link>
-            </li>
-            <li className="megamenu-item">
-              <div className="submenu-content">
-                <div className="block-main">submenu Chăm sóc sức khỏe</div>
-              </div>
-              <Link to="#">Chăm sóc sức khỏe</Link>
-            </li>
-            <li className="megamenu-item">
-              <div className="submenu-content">
-                <div className="block-main">submenu Chăm sóc trang điểm</div>
-              </div>
-              <Link to="#">Chăm sóc trang điểm</Link>
-            </li>
-            <li className="megamenu-item">
-              <div className="submenu-content">
-                <div className="block-main">submenu Chăm sóc tóc </div>
-              </div>
-              <Link to="#">Chăm sóc tóc</Link>
-            </li>
+                <Link to="#">{shop.name}</Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

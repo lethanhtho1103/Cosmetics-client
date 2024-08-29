@@ -2,6 +2,7 @@ import Cart from '~/pages/Cart';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
+import Product from '~/pages/Product';
 import ProductDetail from '~/pages/ProductDetail/idnex';
 import Register from '~/pages/Register';
 
@@ -12,9 +13,14 @@ const publicRoutes = [
     // isLogin: true,
   },
   {
-    path: 'product-detail/:nameProduct',
+    path: '/:nameCategory',
+    component: Product,
+  },
+  {
+    path: '/product-detail/:nameProduct',
     component: ProductDetail,
   },
+
   {
     path: '/cart',
     component: Cart,

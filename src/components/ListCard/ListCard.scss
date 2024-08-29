@@ -1,21 +1,19 @@
 .product-items {
   display: flex;
   flex-wrap: wrap;
-  //   margin: 0 -8px -16px; /* Adjust the margins to account for spacing */
 
   .product-item {
-    max-width: calc(20% - 13px); /* Set the width to 20% minus the gap */
     margin: 0 8px 16px;
     border-radius: 6px;
     box-shadow: 0px 0px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
       0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 
-    &:first-child,
-    &:nth-child(5n + 1) {
+    &.first-in-row {
       margin-left: 0;
     }
-    &:nth-child(5n) {
-      margin-right: 0; /* Remove the right margin for the last item in each row */
+
+    &.last-in-row {
+      margin-right: 0;
     }
   }
   .product-item-brand-link {

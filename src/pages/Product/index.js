@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import UserLayout from '~/layouts/UserLayout';
 import ListCard from '~/components/ListCard';
@@ -25,29 +25,30 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import './Product.scss';
+import productService from '~/services/productService';
 
 function Product() {
-  const { nameCategory } = useParams();
-
-  // States
-  const [sortValue, setSortValue] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 5000000]);
+  const { categoryName } = useParams();
+  const [products, setProducts] = useState([]);
+  const [sortBy, setSortBy] = useState('AZname');
+  const [priceRange, setPriceRange] = useState([0, 3000000]);
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const brandsSet = useRef(false);
 
   const discounts = ['0 - 10%', '10% - 20%', '30% - 40%'];
-  const brands = useMemo(() => ['Thương hiệu A', 'Thương hiệu B', 'Thương hiệu C'], []);
 
   const routes = [
     { name: 'Trang chủ', path: '/' },
-    { name: nameCategory, path: '' },
+    { name: categoryName, path: '' },
   ];
 
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   // Handlers
   const handleSortChange = (event) => {
-    setSortValue(event.target.value);
+    setSortBy(event.target.value);
   };
 
   const handlePriceChange = (event, newValue) => {
@@ -65,12 +66,6 @@ function Product() {
     stateUpdater((prev) => (checked ? [...prev, value] : prev.filter((item) => item !== value)));
   };
 
-  const handleApplyClick = () => {
-    console.log('Khoảng giá đã áp dụng:', priceRange);
-    console.log('Khuyến mãi đã áp dụng:', selectedDiscounts);
-    console.log('Thương hiệu đã áp dụng:', selectedBrands);
-  };
-
   const handleRemoveFilter = useCallback(
     (filter) => {
       if (filter.includes('%')) {
@@ -78,11 +73,41 @@ function Product() {
       } else if (brands.includes(filter)) {
         setSelectedBrands((prev) => prev.filter((brand) => brand !== filter));
       } else {
-        setPriceRange([0, 5000000]);
+        setPriceRange([0, 3000000]);
       }
     },
     [brands],
   );
+
+  const handleGetAllProducts = async () => {
+    const res = await productService.getAllProductByCategoryName({
+      categoryName,
+      sortBy: sortBy.startsWith('AZ') || sortBy.startsWith('ZA') ? sortBy.slice(2) : sortBy,
+      order: sortBy.startsWith('AZ') ? 'asc' : 'desc',
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      trademark: selectedBrands,
+    });
+    setProducts(res.data);
+    // Extract unique trademarks from products and update brands
+    if (!brandsSet.current) {
+      const uniqueBrands = [...new Set(res.data.map((product) => product.trademark))];
+      setBrands(uniqueBrands);
+      brandsSet.current = true;
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryName, sortBy, priceRange, selectedBrands]);
+
+  useEffect(() => {
+    brandsSet.current = false;
+    const uniqueBrands = [...new Set(products.map((product) => product.trademark))];
+    setBrands(uniqueBrands);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryName]);
 
   return (
     <UserLayout>
@@ -96,21 +121,18 @@ function Product() {
             <Box className="page-title-wrapper">
               <Box className="page-title">
                 <Typography variant="h1">Hỗ trợ làm đẹp da</Typography>
-                <Typography variant="body2">(411 sản phẩm)</Typography>
+                <Typography variant="body2">({products?.length} sản phẩm)</Typography>
               </Box>
               <Box className="toolbar-store">
                 <Typography component="label">Xếp theo: </Typography>
                 <FormControl sx={{ minWidth: 120 }} size="small">
-                  <Select value={sortValue} onChange={handleSortChange} displayEmpty>
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Bán chạy nhất</MenuItem>
-                    <MenuItem value={20}>Xếp hạng</MenuItem>
-                    <MenuItem value={30}>Tên sản phẩm (A - Z)</MenuItem>
-                    <MenuItem value={40}>Tên sản phẩm (Z - A)</MenuItem>
-                    <MenuItem value={50}>Giá giảm dần</MenuItem>
-                    <MenuItem value={60}>Giá tăng dần</MenuItem>
+                  <Select value={sortBy} onChange={handleSortChange} displayEmpty>
+                    <MenuItem value="sold_quantity">Bán chạy nhất</MenuItem>
+                    <MenuItem value="average_star">Xếp hạng</MenuItem>
+                    <MenuItem value="AZname">Tên sản phẩm (A - Z)</MenuItem>
+                    <MenuItem value="ZAname">Tên sản phẩm (Z - A)</MenuItem>
+                    <MenuItem value="ZAprice">Giá giảm dần</MenuItem>
+                    <MenuItem value="AZprice">Giá tăng dần</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -123,7 +145,7 @@ function Product() {
                     LỌC THEO
                   </Typography>
                   <Box>
-                    {(priceRange[0] !== 0 || priceRange[1] !== 5000000) && (
+                    {(priceRange[0] !== 0 || priceRange[1] !== 3000000) && (
                       <FilterItem
                         label={`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}`}
                         onRemove={() =>
@@ -162,7 +184,7 @@ function Product() {
                       value={priceRange}
                       onChange={handlePriceChange}
                       min={0}
-                      max={5000000}
+                      max={3000000}
                       step={1000}
                       valueLabelDisplay="auto"
                       sx={{
@@ -177,21 +199,6 @@ function Product() {
                       </Typography>
                       <PriceInput value={formatNumber(priceRange[1])} onChange={(e) => handlePriceInputChange(1, e)} />
                     </Box>
-                    <Button
-                      variant="contained"
-                      onClick={handleApplyClick}
-                      sx={{
-                        marginTop: 2,
-                        backgroundColor: 'black',
-                        color: 'white',
-                        width: '100%',
-                        borderRadius: '50px',
-                        padding: '10px 0',
-                        '&:hover': { backgroundColor: 'black' },
-                      }}
-                    >
-                      ÁP DỤNG
-                    </Button>
                   </AccordionDetails>
                 </Accordion>
 
@@ -250,7 +257,7 @@ function Product() {
                 </Accordion>
               </Box>
               <Box className="column-main" sx={{ mt: '-24px' }}>
-                <ListCard cardCount={4} />
+                <ListCard cardCount={4} products={products} />
               </Box>
             </Box>
           </Box>

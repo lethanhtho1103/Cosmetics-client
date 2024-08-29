@@ -198,7 +198,7 @@ function Header() {
                         <ul className="megamenu-sub-items">
                           {cosmetic.categories.map((category) => (
                             <li key={category.id} className="megamenu-sub-item">
-                              <Link to="/#">{category.name}</Link>
+                              <Link to={`http://localhost:3000/${category.name}`}>{category.name}</Link>
                             </li>
                           ))}
                         </ul>

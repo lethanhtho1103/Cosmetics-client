@@ -13,7 +13,7 @@ const publicRoutes = [
     // isLogin: true,
   },
   {
-    path: '/:nameCategory',
+    path: '/:categoryName',
     component: Product,
   },
   {

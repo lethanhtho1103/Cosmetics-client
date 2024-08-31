@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserLayout from '~/layouts/UserLayout';
 import Breadcrumbs from '~/components/Breakcrumbs';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Grid, Paper, Typography, Box, Rating, Button, TextField, IconButton, Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,9 +11,13 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './ProductDetail.scss';
 import productService from '~/services/productService';
 import { baseUrl } from '~/axios';
+import { useSelector } from 'react-redux';
+import cartService from '~/services/cartService';
+import { toast } from 'react-toastify';
 
 function ProductDetail() {
   const { nameProduct } = useParams();
+  const navigate = useNavigate();
   const [productDetail, setProductDetail] = useState({});
   const userReview = true;
   const routes = [
@@ -21,7 +25,9 @@ function ProductDetail() {
     { name: nameProduct, path: '' },
   ];
 
-  const currentUser = { id: 1, name: 'John Doe' };
+  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
+
+  // const currentUser = { id: 1, name: 'John Doe' };
 
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [rating, setRating] = useState(0);
@@ -55,8 +61,14 @@ function ProductDetail() {
     setQuantity(quantity + 1);
   };
 
-  const handleAddToCart = () => {
-    console.log(`Added ${quantity} items to the cart.`);
+  const handleAddToCart = async (productId, quantity = 1) => {
+    if (currentUser) {
+      const userId = currentUser._id;
+      const res = await cartService.addToCart(userId, productId, quantity);
+      toast.success(res?.message);
+    } else {
+      navigate('/login');
+    }
   };
 
   const handleBuyNow = () => {
@@ -130,7 +142,11 @@ function ProductDetail() {
                       <AddIcon fontSize="small" />
                     </IconButton>
                   </Box>
-                  <Button variant="contained" className="add-to-cart-btn" onClick={handleAddToCart}>
+                  <Button
+                    variant="contained"
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(productDetail?._id, quantity)}
+                  >
                     <ShoppingCartIcon fontSize="small" className="cart-icon" />
                     Thêm vào giỏ
                   </Button>
@@ -201,7 +217,7 @@ function ProductDetail() {
                 {!userReview && (
                   <Box sx={{ mt: 4 }}>
                     <Typography variant="h6" gutterBottom>
-                      Add Your Review
+                      Đánh giá
                     </Typography>
                     <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
                     <TextField
@@ -221,7 +237,7 @@ function ProductDetail() {
                       onClick={handleSubmitReview}
                       disabled={rating === 0 || comment.trim() === ''}
                     >
-                      Submit Review
+                      Lưu đánh giá
                     </Button>
                   </Box>
                 )}

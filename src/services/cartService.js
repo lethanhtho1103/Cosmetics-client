@@ -1,6 +1,19 @@
 import axios from '~/axios';
 
 const cartService = {
+  async addToCart(userId, productId, quantity) {
+    try {
+      const res = await axios.post('/api/cart', {
+        userId,
+        productId,
+        quantity,
+      });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   async getCartByUserId({ userId }) {
     try {
       const res = await axios.get(`/api/cart/${userId}`);

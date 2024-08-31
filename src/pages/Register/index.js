@@ -147,7 +147,7 @@ function Register() {
 
   return (
     <UserLayout>
-      <main className="container page-wrapper">
+      <main className="container-register page-wrapper">
         <section className="page-content">
           <div className="page-title">
             <h1 className="title">Đăng ký</h1>

@@ -2,7 +2,7 @@
   .page-wrapper {
     padding-top: 40px;
   }
-  .container {
+  .container-register {
     max-width: 1168px;
   }
 }
@@ -12,7 +12,7 @@
     max-width: 638px;
     padding-top: 40px;
   }
-  .container {
+  .container-register {
     .tab-header {
       margin: 0 0 -28px;
       .button-tab {
@@ -38,7 +38,7 @@
   flex-direction: column;
 }
 
-.container {
+.container-register {
   box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
@@ -207,7 +207,7 @@
   text-decoration: underline;
 }
 
-.avatar-preview-container {
+.avatar-preview-container-register {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -215,7 +215,7 @@
   margin-bottom: 12px;
 }
 
-.avatar-preview-container img {
+.avatar-preview-container-register img {
   border-radius: 50%;
   border: 2px solid #ddd;
   width: 120px;

@@ -83,7 +83,7 @@ function LoginUser() {
 
   return (
     <UserLayout>
-      <main className="container page-wrapper">
+      <main className="container-login page-wrapper">
         <section className="page-content">
           <div className="page-title">
             <h1 className="title">Đăng nhập</h1>

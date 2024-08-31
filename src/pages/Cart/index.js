@@ -3,32 +3,18 @@ import { Box, Container, FormControlLabel, Grid, Typography, Checkbox } from '@m
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import './Cart.scss';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import cartEmptyIcon from '~/assets/image/cart-empty.svg';
+import cartService from '~/services/cartService';
+import { useSelector } from 'react-redux';
+import { baseUrl } from '~/axios';
+import { toast } from 'react-toastify';
 
 function Cart() {
+  const userId = useSelector((state) => state.auth.login?.currentUser?.data?._id);
   const [selectAll, setSelectAll] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Tinh Chất Skin1004 Madagascar Centella Ampoule ',
-      price: 488000,
-      quantity: 2,
-      selected: false,
-      image:
-        'https://www.guardian.com.vn/media/catalog/product/cache/8cdab6df920e0b94284cbfe2b9c345a4/t/h/thumbnail_3021692_k6dhxtt6fkkqqged.jpg',
-    },
-    {
-      id: 2,
-      name: 'Thực Phẩm Bảo Vệ Sức Khỏe Xuân Nguyên Hà Thủ Ô 5 Trong 1 Dạng Viên 250Gr',
-      price: 218000,
-      quantity: 1,
-      selected: false,
-      image:
-        'https://www.guardian.com.vn/media/catalog/product/cache/8cdab6df920e0b94284cbfe2b9c345a4/t/h/thumbnail_3021692_k6dhxtt6fkkqqged.jpg',
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
 
   const handleQuantityChange = (index, delta) => {
     const newCartItems = [...cartItems];
@@ -61,18 +47,38 @@ function Cart() {
     { name: 'Giỏ hàng', path: '/cart' },
   ];
 
+  const handleGetCart = async () => {
+    const res = await cartService.getCartByUserId({ userId });
+    const initializedCartItems = res?.data?.items?.map((item) => ({
+      ...item,
+      selected: false, // Initialize the selected property
+    }));
+    setCartItems(initializedCartItems);
+  };
+
+  const handleDeleteCart = async (productId) => {
+    const res = await cartService.deleteCart({ userId, productId });
+    handleGetCart();
+    toast.success(res?.message);
+  };
+
+  useEffect(() => {
+    handleGetCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
   return (
     <UserLayout>
       <Container disableGutters maxWidth={false} className="container" sx={{ paddingBottom: '24px' }}>
         <CustomBreadcrumbs routes={routes} />
         <main className="page-main">
-          {cartItems.length > 0 ? (
+          {cartItems?.length > 0 ? (
             <Grid container>
               <Grid item className="cart-items-wrapper">
                 <Box className="cart-heading-wrapper">
                   <Box className="page-title-wrapper">
                     <h1 className="page-title">Giỏ hàng</h1>
-                    <span className="cart-qty">{cartItems.length} sản phẩm</span>
+                    <span className="cart-qty">{cartItems?.length} sản phẩm</span>
                   </Box>
                   <FormControlLabel
                     control={<Checkbox checked={selectAll} onChange={handleSelectAll} />}
@@ -80,16 +86,20 @@ function Cart() {
                   />
                 </Box>
                 <Box className="cart-items">
-                  {cartItems.map((item, index) => (
-                    <Box key={item.id} className="cart-item">
+                  {cartItems?.map((item, index) => (
+                    <Box key={item?.product_id?._id} className="cart-item">
                       <Box className="cart-item-details">
-                        <img src={item.image} alt={item.name} className="cart-item-image" />
+                        <img
+                          src={`${baseUrl}/${item?.product_id?.image}`}
+                          alt={item?.product_id?.name}
+                          className="cart-item-image"
+                        />
                         <Box className="cart-item-info">
                           <Link className="cart-item-info-name" to="/">
-                            {item.name}
+                            {item?.product_id?.name}
                           </Link>
                           <Typography className="cart-item-info-price">
-                            Đơn giá: <span>{item.price.toLocaleString()}đ</span>
+                            Đơn giá: <span>{item?.product_id?.price.toLocaleString()}đ</span>
                           </Typography>
                           <Box className="quantity-controls">
                             <button onClick={() => handleQuantityChange(index, -1)}>-</button>
@@ -102,7 +112,7 @@ function Cart() {
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                           Tạm tính:
                           <Typography sx={{ color: '#f44336', ml: '4px', fontWeight: 700 }}>
-                            {(item.price * item.quantity).toLocaleString()}đ
+                            {(item?.product_id?.price * item?.quantity).toLocaleString()}đ
                           </Typography>
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -111,7 +121,9 @@ function Cart() {
                             label=""
                             sx={{ marginRight: 0 }}
                           />
-                          <Box className="remove-item">Xóa</Box>
+                          <Box className="remove-item" onClick={() => handleDeleteCart(item?.product_id?._id)}>
+                            Xóa
+                          </Box>
                         </Box>
                       </Box>
                     </Box>
@@ -131,7 +143,7 @@ function Cart() {
                   >
                     Tổng sản phẩm đã chọn:{' '}
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
-                      {cartItems.filter((item) => item.selected).length}
+                      {cartItems?.filter((item) => item.selected).length}
                     </Typography>
                   </Typography>
                   <Typography className="order-text">
@@ -139,7 +151,7 @@ function Cart() {
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
                       {cartItems
                         .filter((item) => item.selected)
-                        .reduce((sum, item) => sum + item.price * item.quantity, 0)
+                        .reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
                         .toLocaleString()}
                       đ
                     </Typography>
@@ -152,7 +164,7 @@ function Cart() {
                     <Typography className="total-price">
                       {cartItems
                         .filter((item) => item.selected)
-                        .reduce((sum, item) => sum + item.price * item.quantity, 0)
+                        .reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
                         .toLocaleString()}
                       đ
                     </Typography>

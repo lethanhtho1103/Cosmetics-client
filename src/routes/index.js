@@ -10,7 +10,6 @@ const publicRoutes = [
   {
     path: '/',
     component: Home,
-    // isLogin: true,
   },
   {
     path: '/:categoryName',
@@ -24,6 +23,7 @@ const publicRoutes = [
   {
     path: '/cart',
     component: Cart,
+    isLogin: true,
   },
   {
     path: '/login',

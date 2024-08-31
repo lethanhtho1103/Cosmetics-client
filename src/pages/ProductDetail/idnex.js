@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserLayout from '~/layouts/UserLayout';
 import Breadcrumbs from '~/components/Breakcrumbs';
 import { useParams } from 'react-router-dom';
@@ -9,34 +9,17 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './ProductDetail.scss';
+import productService from '~/services/productService';
+import { baseUrl } from '~/axios';
 
 function ProductDetail() {
   const { nameProduct } = useParams();
+  const [productDetail, setProductDetail] = useState({});
   const userReview = true;
   const routes = [
     { name: 'Trang chủ', path: '/' },
     { name: nameProduct, path: '' },
   ];
-
-  const productDetails = {
-    imageUrl:
-      'https://www.guardian.com.vn/media/catalog/product/cache/30b2b44eba57cd45fd3ef9287600968e/3/0/3023693ud.jpg',
-    name: 'Sữa Rửa Mặt Dịu Nhẹ Cho Da Nhạy Cảm Cetaphil Gentle Skin Cleanser 500Ml',
-    price: '$199.99',
-    brand: 'Cetaphil',
-    description:
-      'Làn da dầu và mụn rất nhạy cảm nên cần được thiết kế một loại nước tẩy trang phù hợp. Với công nghệ Micellar, nước tẩy trang bí đao của CoCoon giúp làm sạch hiệu quả lớp trang điểm, bụi bẩn và dầu thừa, mang lại làn da sạch hoàn toàn và dịu nhẹ',
-    specifications: {
-      weight: '1kg',
-      dimensions: '10x10x10 cm',
-      material: 'Aluminum',
-      color: 'Silver',
-    },
-    reviews: [
-      { user: 'John Doe', comment: 'Great product!', rating: 5, time: '2 days ago', userId: 1 },
-      { user: 'Jane Smith', comment: 'Good value for the price.', rating: 4, time: '1 week ago', userId: 2 },
-    ],
-  };
 
   const currentUser = { id: 1, name: 'John Doe' };
 
@@ -80,8 +63,15 @@ function ProductDetail() {
     console.log(`Purchased ${quantity} items immediately.`);
   };
 
-  const totalReviews = productDetails.reviews.length;
-  const averageRating = productDetails.reviews.reduce((acc, review) => acc + review.rating, 0) / totalReviews;
+  const handleGetProductByName = async () => {
+    const res = await productService.getProductByName({ nameProduct });
+    setProductDetail(res.data);
+  };
+
+  useEffect(() => {
+    handleGetProductByName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nameProduct]);
 
   return (
     <UserLayout>
@@ -92,29 +82,33 @@ function ProductDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Box className="product-image">
-                  <img src={productDetails.imageUrl} alt={productDetails.name} className="product-image-content" />
+                  <img
+                    src={`${baseUrl}/${productDetail?.image}`}
+                    alt={productDetail?.name}
+                    className="product-image-content"
+                  />
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="h4" component="h1" gutterBottom className="product-name">
-                  {productDetails.name}
+                  {productDetail?.name}
                 </Typography>
                 <Box className="product-rating">
-                  <Rating value={averageRating} readOnly precision={0.5} className="rating-stars" />
-                  <Typography className="rating-value">{averageRating.toFixed(1)}</Typography>
+                  <Rating value={productDetail?.average_star} readOnly precision={0.5} className="rating-stars" />
+                  <Typography className="rating-value">{productDetail?.average_star}</Typography>
                   <Typography variant="body1" className="rating-count">
-                    {totalReviews} Đánh giá
+                    {productDetail?.comment_count} Đánh giá
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography className="product-brand">
-                    Xuất xứ: <strong>Hàn Quốc</strong>
+                    Xuất xứ: <strong>{productDetail?.origin}</strong>
                   </Typography>
                   <Typography className="product-brand">
-                    Thương hiệu: <strong>{productDetails.brand}</strong>
+                    Thương hiệu: <strong>{productDetail?.trademark}</strong>
                   </Typography>
                   <Typography className="product-brand">
-                    Hạn sử dụng: <strong>36 tháng</strong>
+                    Hạn sử dụng: <strong>{productDetail?.expiry} tháng</strong>
                   </Typography>
                 </Box>
                 <Box className="price-box-product">
@@ -124,7 +118,7 @@ function ProductDetail() {
                   </span>
                 </Box>
                 <Typography variant="body1" paragraph className="product-description">
-                  {productDetails.description}
+                  {productDetail?.description}
                 </Typography>
                 <Box className="product-actions">
                   <Box className="quantity-selector">
@@ -153,15 +147,15 @@ function ProductDetail() {
               ĐÁNH GIÁ CỦA KHÁCH HÀNG
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mt: '-2px' }}>
-              <Rating value={averageRating} readOnly precision={0.5} />
-              <Typography sx={{ mr: 1, fontWeight: '700', color: '#f7bf09' }}>{averageRating.toFixed(1)}</Typography>
+              <Rating value={productDetail?.average_star} readOnly precision={0.5} />
+              <Typography sx={{ mr: 1, fontWeight: '700', color: '#f7bf09' }}>{productDetail?.average_star}</Typography>
               <Typography variant="body1" className="rating-count">
-                {totalReviews} Đánh giá
+                {productDetail?.comment_count} Đánh giá
               </Typography>
             </Box>
           </Box>
           <Box sx={{ pb: 2 }}>
-            {productDetails.reviews.map((review, index) => (
+            {productDetail?.reviews?.map((review, index) => (
               <Paper key={index} sx={{ p: 2, mb: 3, boxShadow: 1 }} className="comment-user">
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>

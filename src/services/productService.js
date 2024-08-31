@@ -25,6 +25,19 @@ const productService = {
       console.error(error);
     }
   },
+
+  async getProductByName({ nameProduct }) {
+    try {
+      const res = await axios.get('/api/product/get-by-name', {
+        params: {
+          nameProduct,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 
 export default productService;

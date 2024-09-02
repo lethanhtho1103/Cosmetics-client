@@ -1,15 +1,28 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Rating } from '@mui/material';
+import { useState } from 'react';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Pagination, Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './ListCard.scss';
 import { baseUrl } from '~/axios';
 
 function ListCard({ cardCount = 5, products }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  // Calculate the start and end indices for slicing the products array
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = products.slice(startIndex, endIndex);
+
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   return (
     <Box sx={{ marginTop: '24px' }}>
       <div className={`product-items product-items-${cardCount}`}>
-        {products?.map((product, index) => (
+        {currentProducts.map((product, index) => (
           <Card
             className={`product-item ${index % cardCount === 0 ? 'first-in-row' : ''} ${
               (index + 1) % cardCount === 0 ? 'last-in-row' : ''
@@ -53,6 +66,25 @@ function ListCard({ cardCount = 5, products }) {
           </Card>
         ))}
       </div>
+      <Pagination
+        count={Math.ceil(products.length / itemsPerPage)}
+        page={currentPage}
+        onChange={handlePageChange}
+        color="primary"
+        sx={{
+          marginTop: '16px',
+          display: 'flex',
+          justifyContent: 'center',
+          '& .MuiPaginationItem-root': {
+            backgroundColor: '#f5f5f5',
+            fontWeight: 600, // Ensures good contrast
+          },
+          '& .Mui-selected': {
+            color: 'white', // Active page color
+            backgroundColor: 'primary.main',
+          },
+        }}
+      />
     </Box>
   );
 }

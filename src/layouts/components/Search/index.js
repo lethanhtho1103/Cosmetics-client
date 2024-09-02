@@ -1,71 +1,89 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 
-const filter = createFilterOptions();
+import productService from '~/services/productService';
+import useDebounce from '~/hooks/useDebounce';
+import { baseUrl } from '~/axios';
 
 export default function Search() {
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = useState('');
+  const [products, setProducts] = useState([]);
+  const debouncedValue = useDebounce(value, 500);
+
+  const handleGetProductByName = async (nameProduct) => {
+    try {
+      if (nameProduct) {
+        const res = await productService.getProductByName({ nameProduct });
+        setProducts(res.data || []); // Ensure that you always set an array
+      } else {
+        setProducts([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+      setProducts([]); // In case of an error, fallback to an empty array
+    }
+  };
+
+  useEffect(() => {
+    handleGetProductByName(debouncedValue);
+  }, [debouncedValue]);
 
   return (
     <Autocomplete
-      value={value}
-      onChange={(event, newValue) => {
-        if (typeof newValue === 'string') {
-          setValue({
-            title: newValue,
-          });
-        } else if (newValue && newValue.inputValue) {
-          // Create a new value from the user input
-          setValue({
-            title: newValue.inputValue,
-          });
-        } else {
-          setValue(newValue);
-        }
+      freeSolo
+      inputValue={value}
+      onInputChange={(event, newValue) => {
+        setValue(newValue);
       }}
-      filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-        const { inputValue } = params;
-        // Suggest the creation of a new value
-        const isExisting = options.some((option) => inputValue === option.title);
-        if (inputValue !== '' && !isExisting) {
-          filtered.push({
-            inputValue,
-            title: `Add "${inputValue}"`,
-          });
-        }
-
-        return filtered;
-      }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={top100Films}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        if (typeof option === 'string') {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.title;
-      }}
-      renderOption={(props, option) => {
-        const { key, ...optionProps } = props;
-        return (
-          <li key={key} {...optionProps}>
-            {option.title}
-          </li>
-        );
-      }}
+      options={products}
+      getOptionLabel={(option) => option?.name || ''}
+      noOptionsText="Không có kết quả phù hợp"
+      renderOption={(props, option) => (
+        <li {...props} key={option?.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Link
+            href={`http://localhost:3000/product-detail/${option?.name}`}
+            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+          >
+            <img src={`${baseUrl}/${option?.image}`} alt={option?.name} width="50" height="50" />
+            <div style={{ marginLeft: '10px' }}>
+              <div
+                style={{
+                  fontWeight: '500',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  color: '#1b1a19',
+                  fontSize: '12px',
+                }}
+              >
+                {option?.name}
+              </div>
+              <div style={{ color: 'red', fontSize: '12px' }}>{option?.price}đ</div>
+            </div>
+          </Link>
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          placeholder="Tìm kiếm sản phẩm..."
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton edge="start">
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
       sx={{
         width: 600,
         fontSize: '14px',
@@ -89,43 +107,6 @@ export default function Search() {
           },
         },
       }}
-      freeSolo
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          placeholder="Tìm kiếm sản phẩm..."
-          InputProps={{
-            ...params.InputProps,
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton edge="start">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      )}
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 },
-  {
-    title: 'Star Wars: Episode VI - Return of the Jedi',
-    year: 1983,
-  },
-  { title: 'Reservoir Dogs', year: 1992 },
-  { title: 'Braveheart', year: 1995 },
-  { title: 'M', year: 1931 },
-  { title: 'Requiem for a Dream', year: 2000 },
-  { title: 'Amélie', year: 2001 },
-];

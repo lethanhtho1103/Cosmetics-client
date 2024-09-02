@@ -11,7 +11,7 @@ function ListCard({ cardCount = 5, products }) {
   // Calculate the start and end indices for slicing the products array
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProducts = products.slice(startIndex, endIndex);
+  const currentProducts = products?.slice(startIndex, endIndex);
 
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -22,7 +22,7 @@ function ListCard({ cardCount = 5, products }) {
   return (
     <Box sx={{ marginTop: '24px' }}>
       <div className={`product-items product-items-${cardCount}`}>
-        {currentProducts.map((product, index) => (
+        {currentProducts?.map((product, index) => (
           <Card
             className={`product-item ${index % cardCount === 0 ? 'first-in-row' : ''} ${
               (index + 1) % cardCount === 0 ? 'last-in-row' : ''
@@ -67,7 +67,7 @@ function ListCard({ cardCount = 5, products }) {
         ))}
       </div>
       <Pagination
-        count={Math.ceil(products.length / itemsPerPage)}
+        count={Math.ceil(products?.length / itemsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"

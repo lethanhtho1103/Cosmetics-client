@@ -1,6 +1,7 @@
 import Cart from '~/pages/Cart';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
+import MyTicket from '~/pages/MyTicket';
 import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
 import Product from '~/pages/Product';
 import ProductDetail from '~/pages/ProductDetail/idnex';
@@ -23,6 +24,11 @@ const publicRoutes = [
   {
     path: '/cart',
     component: Cart,
+    isLogin: true,
+  },
+  {
+    path: '/my-ticket',
+    component: MyTicket,
     isLogin: true,
   },
   {

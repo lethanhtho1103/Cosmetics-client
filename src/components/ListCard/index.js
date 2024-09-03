@@ -80,7 +80,7 @@ function ListCard({ cardCount = 5, products }) {
             fontWeight: 600, // Ensures good contrast
           },
           '& .Mui-selected': {
-            color: 'white', // Active page color
+            color: 'white !important', // Active page color
             backgroundColor: 'primary.main',
           },
         }}

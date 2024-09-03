@@ -10,11 +10,25 @@ import cartService from '~/services/cartService';
 import { useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
 import { toast } from 'react-toastify';
+import CheckoutDialog from '~/components/CheckoutDialog';
 
 function Cart() {
   const userId = useSelector((state) => state.auth.login?.currentUser?.data?._id);
+  const userAddress = useSelector((state) => state.auth.login?.currentUser?.data?.address);
+
   const [selectAll, setSelectAll] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const hasSelectedItems = cartItems.some((item) => item.selected);
+
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  const handlePlaceOrder = () => {
+    setOpenDialog(false);
+    toast.success('Đặt hàng thành công!');
+  };
 
   const handleQuantityChange = (index, delta) => {
     const newCartItems = [...cartItems];
@@ -169,7 +183,17 @@ function Cart() {
                       đ
                     </Typography>
                   </Typography>
-                  <button className="checkout-button">ĐẶT HÀNG</button>
+                  <button
+                    className="checkout-button"
+                    onClick={handleOpenDialog}
+                    disabled={!hasSelectedItems}
+                    style={{
+                      cursor: hasSelectedItems ? 'pointer' : 'not-allowed',
+                      opacity: hasSelectedItems ? 1 : 0.5,
+                    }}
+                  >
+                    ĐẶT HÀNG
+                  </button>
                 </Box>
               </Grid>
             </Grid>
@@ -184,6 +208,13 @@ function Cart() {
               </Box>
             </>
           )}
+          <CheckoutDialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            cartItems={cartItems}
+            userAddress={userAddress}
+            onPlaceOrder={handlePlaceOrder}
+          />
         </main>
       </Container>
     </UserLayout>

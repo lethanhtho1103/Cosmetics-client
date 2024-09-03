@@ -36,6 +36,18 @@ const cartService = {
       console.error(error);
     }
   },
+  async updateCart(userId, productId, quantity) {
+    try {
+      const res = await axios.put('/api/cart', {
+        userId,
+        productId,
+        quantity,
+      });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 
 export default cartService;

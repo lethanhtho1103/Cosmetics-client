@@ -1,10 +1,10 @@
 import UserLayout from '~/layouts/UserLayout';
-import { Box, Container, FormControlLabel, Grid, Typography, Checkbox } from '@mui/material';
+import { Box, Container, FormControlLabel, Grid, Typography, Checkbox, CircularProgress } from '@mui/material';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import './Cart.scss';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
+import { debounce } from 'lodash';
 import cartEmptyIcon from '~/assets/image/cart-empty.svg';
 import cartService from '~/services/cartService';
 import { useSelector } from 'react-redux';
@@ -19,8 +19,10 @@ function Cart() {
   const [selectAll, setSelectAll] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const hasSelectedItems = cartItems.some((item) => item.selected);
+  const loadingTimeoutRef = useRef(null);
 
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
@@ -30,13 +32,38 @@ function Cart() {
     toast.success('Đặt hàng thành công!');
   };
 
-  const handleQuantityChange = (index, delta) => {
+  const debouncedUpdateCart = debounce(async (userId, productId, newQuantity) => {
+    try {
+      await cartService.updateCart(userId, productId, newQuantity);
+    } catch (error) {
+      toast.error('Cập nhật số lượng không thành công!');
+    }
+  }, 200);
+
+  const handleQuantityChange = async (productId, index, delta) => {
+    if (loading) return;
+
+    setLoading(true);
     const newCartItems = [...cartItems];
     const newQuantity = newCartItems[index].quantity + delta;
+
     if (newQuantity > 0) {
       newCartItems[index].quantity = newQuantity;
       setCartItems(newCartItems);
+
+      // Debounce the API call to handle rapid clicks
+      debouncedUpdateCart(userId, productId, newQuantity);
+    } else {
+      setLoading(false);
     }
+
+    // Clear any existing timeout to ensure only one is active at a time
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
+
+    // Set a new timeout for loading state to ensure spinner visibility
+    loadingTimeoutRef.current = setTimeout(() => setLoading(false), 500); // Ensure spinner is visible for at least 500ms
   };
 
   const handleSelectAll = () => {
@@ -116,9 +143,19 @@ function Cart() {
                             Đơn giá: <span>{item?.product_id?.price.toLocaleString()}đ</span>
                           </Typography>
                           <Box className="quantity-controls">
-                            <button onClick={() => handleQuantityChange(index, -1)}>-</button>
+                            <button
+                              onClick={() => handleQuantityChange(item?.product_id?._id, index, -1)}
+                              disabled={loading}
+                            >
+                              -
+                            </button>
                             <span>{item.quantity}</span>
-                            <button onClick={() => handleQuantityChange(index, 1)}>+</button>
+                            <button
+                              onClick={() => handleQuantityChange(item?.product_id?._id, index, 1)}
+                              disabled={loading}
+                            >
+                              +
+                            </button>
                           </Box>
                         </Box>
                       </Box>
@@ -207,6 +244,11 @@ function Cart() {
                 <Link to="/">Tiếp tục mua hàng</Link>
               </Box>
             </>
+          )}
+          {loading && (
+            <Box className="loading-overlay">
+              <CircularProgress />
+            </Box>
           )}
           <CheckoutDialog
             open={openDialog}

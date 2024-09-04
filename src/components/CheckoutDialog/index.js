@@ -14,10 +14,23 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { baseUrl } from '~/axios';
+import PayPal from '../PayPal';
+import { toast } from 'react-toastify';
+import orderService from '~/services/orderService';
 
-function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, onPlaceOrder }) {
+function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handleGetCart, userId }) {
   const selectedItems = cartItems.filter((item) => item.selected);
   const totalPrice = selectedItems.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
+  const handleCheckout = async (isPayment) => {
+    try {
+      const response = await orderService.checkout(userId, selectedItems, isPayment);
+      onClose();
+      handleGetCart();
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -89,6 +102,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, onPlac
                   </Typography>
                 </Box>
               </FormControl>
+              <PayPal cost={totalPrice} handleCheckout={handleCheckout} />
             </Paper>
           </Grid>
         </Grid>

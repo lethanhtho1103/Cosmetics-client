@@ -27,11 +27,6 @@ function Cart() {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
-  const handlePlaceOrder = () => {
-    setOpenDialog(false);
-    toast.success('Đặt hàng thành công!');
-  };
-
   const debouncedUpdateCart = debounce(async (userId, productId, newQuantity) => {
     try {
       await cartService.updateCart(userId, productId, newQuantity);
@@ -255,7 +250,8 @@ function Cart() {
             onClose={handleCloseDialog}
             cartItems={cartItems}
             userAddress={userAddress}
-            onPlaceOrder={handlePlaceOrder}
+            handleGetCart={handleGetCart}
+            userId={userId}
           />
         </main>
       </Container>

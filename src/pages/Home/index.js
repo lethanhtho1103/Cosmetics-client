@@ -1,14 +1,11 @@
-import { Box, Fab, Tooltip, Typography } from '@mui/material';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { Box } from '@mui/material';
 import ImageCarousel from '~/components/ImageCarousel';
 import UserLayout from '~/layouts/UserLayout';
 import img5 from '~/assets/image/img5.jpg';
 import img6 from '~/assets/image/img6.jpg';
 import PromotionTabs from '~/components/PromotionTabs';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import PhoneIcon from '@mui/icons-material/Phone';
 import ListCard from '~/components/ListCard';
 import ACCUCHEK from '~/assets/image/ACCU-CHEK.jpg';
 import Laboratoire from '~/assets/image/Laboratoire.png';
@@ -20,31 +17,6 @@ import cocoon from '~/assets/image/cocoon.jpg';
 import './Home.scss';
 
 function Home() {
-  const [showButton, setShowButton] = useState(false);
-  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
-
-  const handlePhoneClick = () => {
-    setShowPhoneNumber((prev) => !prev);
-  };
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <UserLayout>
       <Box sx={{ width: '100%', display: 'flex' }}>
@@ -132,40 +104,6 @@ function Home() {
           <ListCard />
         </Box>
       </Box>
-      <Tooltip title="Phone">
-        <Fab
-          color="primary"
-          aria-label="phone"
-          size="small"
-          onClick={handlePhoneClick}
-          sx={{ position: 'fixed', bottom: '72px', right: '16px' }}
-        >
-          <PhoneIcon sx={{ color: '#fff' }} />
-        </Fab>
-      </Tooltip>
-      {showPhoneNumber && (
-        <Typography
-          variant="h6"
-          sx={{
-            position: 'fixed',
-            bottom: '74px',
-            right: '60px',
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#fafafa',
-            background: '#f6831f',
-            padding: '6px 8px',
-            borderRadius: '44px',
-          }}
-        >
-          0972221953
-        </Typography>
-      )}
-      {showButton && (
-        <Fab size="small" onClick={scrollToTop} sx={{ position: 'fixed', bottom: 16, right: 16, background: '#fff' }}>
-          <ArrowUpwardIcon color="primary" />
-        </Fab>
-      )}
     </UserLayout>
   );
 }

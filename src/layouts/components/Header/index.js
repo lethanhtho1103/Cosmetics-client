@@ -5,14 +5,13 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Container from '@mui/material/Container';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -75,7 +74,7 @@ function Header() {
               {currentUser ? (
                 <>
                   <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    <Tooltip title="Account settings">
+                    <Tooltip title="Cài đặt tài khoản">
                       <IconButton
                         onClick={handleClick}
                         size="small"
@@ -130,29 +129,44 @@ function Header() {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   >
                     <MenuItem>
-                      <Avatar /> Profile
+                      <Link
+                        to="http://localhost:3000/account"
+                        style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
+                      >
+                        <Avatar /> Tài Khoản Của Tôi
+                      </Link>
                     </MenuItem>
                     <MenuItem>
-                      <Avatar /> My account
+                      <Link
+                        to="http://localhost:3000/account/orders"
+                        style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
+                      >
+                        <Box
+                          sx={{
+                            width: '32px',
+                            height: '32px',
+                            mr: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: '#dbdbdb',
+                            justifyContent: 'center',
+                            ml: '-4px',
+                            borderRadius: '44px',
+                            color: '#fff',
+                          }}
+                        >
+                          <InventoryOutlinedIcon />
+                        </Box>
+                        Đơn Mua
+                      </Link>
                     </MenuItem>
                     <Divider />
-                    <MenuItem>
-                      <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                      </ListItemIcon>
-                      Add another account
-                    </MenuItem>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <Settings fontSize="small" />
-                      </ListItemIcon>
-                      Settings
-                    </MenuItem>
+
                     <MenuItem onClick={handleLogout}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
                       </ListItemIcon>
-                      Logout
+                      Đăng Xuất
                     </MenuItem>
                   </Menu>
                   <div className="logged-in">Xin chào, {currentUser?.data?.username}</div>

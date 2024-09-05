@@ -21,6 +21,7 @@ import orderService from '~/services/orderService';
 function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handleGetCart, userId }) {
   const selectedItems = cartItems.filter((item) => item.selected);
   const totalPrice = selectedItems.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
+
   const handleCheckout = async (isPayment) => {
     try {
       const response = await orderService.checkout(userId, selectedItems, isPayment);
@@ -34,7 +35,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ textTransform: 'uppercase', fontWeight: 700 }}>
+      <DialogTitle sx={{ textTransform: 'uppercase', fontWeight: 700, position: 'relative' }}>
         Xác nhận đặt hàng
         <IconButton aria-label="close" onClick={onClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
           <CloseIcon />
@@ -43,7 +44,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
-            <Paper sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
+            <Paper sx={{ padding: 2, backgroundColor: '#f5f5f5', height: '100%' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
                 Sản phẩm đã chọn
               </Typography>
@@ -70,21 +71,21 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
                   {totalPrice.toLocaleString()}đ
                 </Typography>
               </Box>
+              <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 700, textTransform: 'uppercase' }}>
+                Thông tin giao hàng
+              </Typography>
+              <Box className="box-content" sx={{ border: '1px solid #f6831f', padding: 2, borderRadius: 2, mb: 2 }}>
+                <strong>Lê Thành Thọ - 0972221953</strong>
+                <Typography sx={{ color: '#545453', fontWeight: 500 }}>{userAddress}</Typography>
+              </Box>
             </Paper>
           </Grid>
 
           {/* Right Side: Shipping Address, Payment, and Shipping Method */}
           <Grid item xs={12} md={5}>
-            <Paper sx={{ padding: 2, backgroundColor: '#e0f7fa' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, textTransform: 'uppercase' }}>
-                Thông tin giao hàng
-              </Typography>
-              <Box className="box-content" sx={{ border: '1px solid #ccc', padding: 2, borderRadius: 2 }}>
-                <strong>Lê Thành Thọ - 0972221953</strong>
-                <Typography sx={{ color: '#545453', fontWeight: 500 }}>{userAddress}</Typography>
-              </Box>
-              <FormControl component="fieldset" sx={{ mt: 3 }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
+            <Paper sx={{ padding: 2, backgroundColor: '#e0f7fa', height: '100%' }}>
+              <FormControl component="fieldset">
+                <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
                   Phương thức vận chuyển
                 </Typography>
                 <Box sx={{ border: '1px solid #f6831f', padding: 2, borderRadius: 2 }}>
@@ -92,16 +93,19 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
                     value="standard"
                     control={<Radio checked sx={{ color: '#f6831f' }} />}
                     label="Giao hàng tiêu chuẩn (3-5 ngày)"
-                    sx={{
-                      color: '#f6831f',
-                    }}
+                    sx={{ color: '#f6831f' }}
                   />
-
                   <Typography sx={{ fontSize: '0.875rem', mt: 1, color: '#555' }}>
                     Dự kiến giao hàng từ 2-5 ngày, trừ Chủ Nhật, Lễ Tết. (Miễn phí giao hàng toàn quốc).
                   </Typography>
                 </Box>
               </FormControl>
+              <Typography
+                variant="h6"
+                sx={{ mb: 1, mt: 3, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}
+              >
+                Thanh toán bằng Paypal
+              </Typography>
               <PayPal cost={totalPrice} handleCheckout={handleCheckout} />
             </Paper>
           </Grid>

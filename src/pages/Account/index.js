@@ -4,14 +4,18 @@ import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import './MyTicket.scss';
-import { Link } from 'react-router-dom';
+import './Account.scss';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
-function MyTicket() {
+function Account() {
   const routes = [
     { name: 'Trang chủ', path: '/' },
     { name: 'Tài khoản của tôi', path: '' },
   ];
+
+  const location = useLocation();
+  console.log(location.pathname);
+
   return (
     <UserLayout>
       <Container disableGutters maxWidth={false} className="container">
@@ -20,17 +24,21 @@ function MyTicket() {
           <Box className="my-ticket">
             <Box className="side-bar">
               <ul className="nav-items">
-                <li className="nav-item active">
-                  <strong>
-                    <AccountCircleOutlinedIcon />
-                    Tài khoản của tôi
-                  </strong>
+                <li className="nav-item">
+                  <Link to="/account" className={`${location.pathname === '/account' ? 'active' : ''}`}>
+                    <strong>
+                      <AccountCircleOutlinedIcon />
+                      Tài khoản của tôi
+                    </strong>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <strong>
-                    <InventoryOutlinedIcon />
-                    Quản lý đơn hàng
-                  </strong>
+                  <Link to="/account/orders" className={`${location.pathname === '/account/orders' ? 'active' : ''}`}>
+                    <strong>
+                      <InventoryOutlinedIcon />
+                      Quản lý đơn hàng
+                    </strong>
+                  </Link>
                 </li>
                 <li className="nav-item">
                   <strong>
@@ -41,17 +49,7 @@ function MyTicket() {
               </ul>
             </Box>
             <Box className="column-main">
-              <h2>Tài khoản của tôi</h2>
-              <Box className="box-info">
-                <Box className="box-title">Thông tin cá nhân</Box>
-                <Box className="box-content">
-                  <strong>Lê Thành Thọ - 0972221953</strong>
-                  <div>Email: lethanhtho1953@gmail.com</div>
-                </Box>
-                <Box className="box-action">
-                  <Link to="/">Chỉnh sửa</Link>
-                </Box>
-              </Box>
+              <Outlet />
             </Box>
           </Box>
         </main>
@@ -60,4 +58,4 @@ function MyTicket() {
   );
 }
 
-export default MyTicket;
+export default Account;

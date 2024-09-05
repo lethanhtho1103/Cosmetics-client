@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { publicRoutes } from './routes';
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
+
 function App() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
 
@@ -10,9 +11,9 @@ function App() {
       <div className="App">
         <Routes>
           {publicRoutes.map((route, index) => {
-            let LayOut = Fragment;
+            let Layout = Fragment;
             if (route.layout) {
-              LayOut = route.layout;
+              Layout = route.layout;
             }
             const Page = route.component;
 
@@ -28,12 +29,16 @@ function App() {
                   route.isLogin && !currentUser ? (
                     <Navigate to="/login" replace />
                   ) : (
-                    <LayOut>
+                    <Layout>
                       <Page />
-                    </LayOut>
+                    </Layout>
                   )
                 }
-              />
+              >
+                {route.children?.map((child, childIndex) => (
+                  <Route key={childIndex} path={child.path} element={<child.component />} />
+                ))}
+              </Route>
             );
           })}
         </Routes>

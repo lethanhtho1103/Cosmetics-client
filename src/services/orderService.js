@@ -16,6 +16,15 @@ const orderService = {
       throw new Error(error.response?.data?.message || 'Đặt hàng thất bại');
     }
   },
+
+  async getOrderById(userId) {
+    try {
+      const res = await axios.get(`/api/order/user/${userId}`);
+      return res?.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Thất bại');
+    }
+  },
 };
 
 export default orderService;

@@ -1,15 +1,19 @@
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function AccountInfo() {
+  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
   return (
     <Box>
       <h2>Tài khoản của tôi</h2>
       <Box className="box-info">
         <Box className="box-title">Thông tin cá nhân</Box>
         <Box className="box-content">
-          <strong>Lê Thành Thọ - 0972221953</strong>
-          <div>Email: lethanhtho1953@gmail.com</div>
+          <strong>
+            {currentUser?.username} - {currentUser?.phone}
+          </strong>
+          <div>Email: {currentUser?.email}</div>
         </Box>
         <Box className="box-action">
           <Link to="/">Chỉnh sửa</Link>

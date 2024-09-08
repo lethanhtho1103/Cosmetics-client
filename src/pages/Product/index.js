@@ -148,7 +148,7 @@ function Product() {
                       <FilterItem
                         label={`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}`}
                         onRemove={() =>
-                          handleRemoveFilter(`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}đ`)
+                          handleRemoveFilter(`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}₫`)
                         }
                       />
                     )}
@@ -176,8 +176,8 @@ function Product() {
                   </AccordionSummary>
                   <AccordionDetails>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography>{`${formatNumber(priceRange[0])}đ`}</Typography>
-                      <Typography>{`${formatNumber(priceRange[1])}đ`}</Typography>
+                      <Typography>{`${formatNumber(priceRange[0])}₫`}</Typography>
+                      <Typography>{`${formatNumber(priceRange[1])}₫`}</Typography>
                     </Box>
                     <Slider
                       value={priceRange}

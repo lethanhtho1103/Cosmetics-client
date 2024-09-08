@@ -59,7 +59,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
                     <Typography sx={{ fontWeight: 600 }}>{item?.product_id?.name}</Typography>
                     <Typography sx={{ color: '#545453' }}>Số lượng: {item.quantity}</Typography>
                     <Typography sx={{ color: '#545453' }}>
-                      Đơn giá: {item?.product_id?.price.toLocaleString()}đ
+                      Đơn giá: {item?.product_id?.price.toLocaleString()}₫
                     </Typography>
                   </Box>
                 </Box>
@@ -68,7 +68,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
                 <Typography sx={{ fontWeight: 500, fontSize: '16px' }}>Tổng thanh toán:</Typography>
                 <Typography variant="h6" sx={{ color: '#f44336', fontWeight: 700 }}>
-                  {totalPrice.toLocaleString()}đ
+                  {totalPrice.toLocaleString()}₫
                 </Typography>
               </Box>
               <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 700, textTransform: 'uppercase' }}>

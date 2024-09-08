@@ -135,7 +135,7 @@ function Cart() {
                             {item?.product_id?.name}
                           </Link>
                           <Typography className="cart-item-info-price">
-                            Đơn giá: <span>{item?.product_id?.price.toLocaleString()}đ</span>
+                            Đơn giá: <span>{item?.product_id?.price.toLocaleString()}₫</span>
                           </Typography>
                           <Box className="quantity-controls">
                             <button
@@ -158,7 +158,7 @@ function Cart() {
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                           Tạm tính:
                           <Typography sx={{ color: '#f44336', ml: '4px', fontWeight: 700 }}>
-                            {(item?.product_id?.price * item?.quantity).toLocaleString()}đ
+                            {(item?.product_id?.price * item?.quantity).toLocaleString()}₫
                           </Typography>
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>

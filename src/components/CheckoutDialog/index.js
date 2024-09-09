@@ -19,8 +19,8 @@ import orderService from '~/services/orderService';
 function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, currentUser }) {
   const userId = currentUser?._id;
 
-  const selectedItems = cartItems.filter((item) => item.selected);
-  const totalPrice = selectedItems.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
+  const selectedItems = cartItems?.filter((item) => item.selected);
+  const totalPrice = selectedItems?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
 
   const handleCheckout = async (isPayment) => {
     try {
@@ -48,7 +48,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
                 Sản phẩm đã chọn
               </Typography>
-              {selectedItems.map((item) => (
+              {selectedItems?.map((item) => (
                 <Box key={item?.product_id?._id} sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                   <img
                     src={`${baseUrl}/${item?.product_id?.image}`}
@@ -68,7 +68,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
                 <Typography sx={{ fontWeight: 500, fontSize: '16px' }}>Tổng thanh toán:</Typography>
                 <Typography variant="h6" sx={{ color: '#f44336', fontWeight: 700 }}>
-                  {totalPrice.toLocaleString()}₫
+                  {totalPrice?.toLocaleString()}₫
                 </Typography>
               </Box>
               <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 700, textTransform: 'uppercase' }}>
@@ -76,10 +76,14 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
               </Typography>
               <Box className="box-content" sx={{ border: '1px solid #ccc', padding: 2, borderRadius: 2, mb: 2 }}>
                 <strong>
-                  {currentUser?.username} &nbsp;•&nbsp; {currentUser?.phone}
+                  {currentUser?.username} {currentUser?.phone && <>&nbsp;•&nbsp; {currentUser?.phone}</>}
                 </strong>
                 <Typography sx={{ color: '#545453', fontWeight: 400 }}>
-                  {`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}
+                  {currentUser?.address ? (
+                    <div>{`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}</div>
+                  ) : (
+                    <div>Bạn chưa có địa chỉ giao hàng.</div>
+                  )}
                 </Typography>
               </Box>
             </Paper>

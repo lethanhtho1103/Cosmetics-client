@@ -27,7 +27,7 @@ function Cart() {
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const hasSelectedItems = cartItems.some((item) => item.selected);
+  const hasSelectedItems = cartItems?.some((item) => item?.selected);
   const loadingTimeoutRef = useRef(null);
 
   const handleOpenDialog = () => setOpenDialog(true);
@@ -46,7 +46,7 @@ function Cart() {
 
     setLoading(true);
     const newCartItems = [...cartItems];
-    const newQuantity = newCartItems[index].quantity + delta;
+    const newQuantity = newCartItems[index]?.quantity + delta;
 
     if (newQuantity > 0) {
       newCartItems[index].quantity = newQuantity;
@@ -79,9 +79,9 @@ function Cart() {
 
   const handleSelectItem = (index) => {
     const newCartItems = [...cartItems];
-    newCartItems[index].selected = !newCartItems[index].selected;
+    newCartItems[index].selected = !newCartItems[index]?.selected;
     setCartItems(newCartItems);
-    setSelectAll(newCartItems.every((item) => item.selected));
+    setSelectAll(newCartItems.every((item) => item?.selected));
   };
 
   const routes = [
@@ -141,7 +141,7 @@ function Cart() {
                             {item?.product_id?.name}
                           </Link>
                           <Typography className="cart-item-info-price">
-                            Đơn giá: <span>{item?.product_id?.price.toLocaleString()}₫</span>
+                            Đơn giá: <span>{item?.product_id?.price?.toLocaleString()}₫</span>
                           </Typography>
                           <Box className="quantity-controls">
                             <button
@@ -150,7 +150,7 @@ function Cart() {
                             >
                               -
                             </button>
-                            <span>{item.quantity}</span>
+                            <span>{item?.quantity}</span>
                             <button
                               onClick={() => handleQuantityChange(item?.product_id?._id, index, 1)}
                               disabled={loading}
@@ -164,12 +164,12 @@ function Cart() {
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                           Tạm tính:
                           <Typography sx={{ color: '#f44336', ml: '4px', fontWeight: 700 }}>
-                            {(item?.product_id?.price * item?.quantity).toLocaleString()}₫
+                            {(item?.product_id?.price * item?.quantity)?.toLocaleString()}₫
                           </Typography>
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <FormControlLabel
-                            control={<Checkbox checked={item.selected} onChange={() => handleSelectItem(index)} />}
+                            control={<Checkbox checked={item?.selected} onChange={() => handleSelectItem(index)} />}
                             label=""
                             sx={{ marginRight: 0 }}
                           />
@@ -195,15 +195,15 @@ function Cart() {
                   >
                     Tổng sản phẩm đã chọn:{' '}
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
-                      {cartItems?.filter((item) => item.selected).length}
+                      {cartItems?.filter((item) => item?.selected).length}
                     </Typography>
                   </Typography>
                   <Typography className="order-text">
                     Tạm tính:
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
                       {cartItems
-                        .filter((item) => item.selected)
-                        .reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
+                        ?.filter((item) => item?.selected)
+                        ?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
                         .toLocaleString()}
                       đ
                     </Typography>
@@ -215,8 +215,8 @@ function Cart() {
                     Tổng thanh toán:
                     <Typography className="total-price">
                       {cartItems
-                        .filter((item) => item.selected)
-                        .reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
+                        ?.filter((item) => item?.selected)
+                        ?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
                         .toLocaleString()}
                       đ
                     </Typography>

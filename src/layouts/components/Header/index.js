@@ -139,7 +139,7 @@ function Header() {
                     </MenuItem>
                     <MenuItem>
                       <Link
-                        to="http://localhost:3000/account/orders"
+                        to="http://localhost:3000/account/address"
                         style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
                       >
                         <Box

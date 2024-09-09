@@ -139,9 +139,13 @@ function Address() {
         <Box className="box-title">Nhà riêng</Box>
         <Box className="box-content">
           <strong>
-            {currentUser?.username} &nbsp;•&nbsp; {currentUser?.phone}
+            {currentUser?.username} {currentUser?.phone && <>&nbsp;•&nbsp; {currentUser?.phone}</>}
           </strong>
-          <div>{`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}</div>
+          {currentUser?.address ? (
+            <div>{`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}</div>
+          ) : (
+            <div>Bạn chưa có địa chỉ giao hàng.</div>
+          )}
         </Box>
         <Box className="box-action">
           <Button onClick={handleClickOpen}>Chỉnh sửa</Button>

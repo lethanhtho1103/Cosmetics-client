@@ -8,6 +8,7 @@ import OAuthCallback from '~/pages/OAuthCallback/OAuthCallback';
 import Product from '~/pages/Product';
 import ProductDetail from '~/pages/ProductDetail/idnex';
 import Register from '~/pages/Register';
+import Address from '~/pages/Address';
 
 const publicRoutes = [
   {
@@ -34,6 +35,7 @@ const publicRoutes = [
     isLogin: true,
     children: [
       { path: '', component: AccountInfo },
+      { path: 'address', component: Address },
       { path: 'orders', component: OrderHistory },
     ],
   },

@@ -3,6 +3,7 @@ import { Box, Container } from '@mui/material';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
+import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import './Account.scss';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -14,7 +15,6 @@ function Account() {
   ];
 
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <UserLayout>
@@ -29,6 +29,14 @@ function Account() {
                     <strong>
                       <AccountCircleOutlinedIcon />
                       Tài khoản của tôi
+                    </strong>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/account/address" className={`${location.pathname === '/account/address' ? 'active' : ''}`}>
+                    <strong>
+                      <AddLocationOutlinedIcon />
+                      Địa chỉ
                     </strong>
                   </Link>
                 </li>

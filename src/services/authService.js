@@ -9,6 +9,24 @@ const authService = {
     });
     return res.data;
   },
+
+  async updateUser(userId, username, phone, address, province, district, ward) {
+    try {
+      const res = await axios.put(`/api/authentication/update-user/${userId}`, {
+        username,
+        phone,
+        address,
+        province,
+        district,
+        ward,
+      });
+      return res.data;
+    } catch (error) {
+      console.error('API error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+
   async register(formData) {
     const res = await axios.post('/api/authentication/register', formData);
     return res.data;

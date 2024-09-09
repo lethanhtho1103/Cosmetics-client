@@ -11,7 +11,7 @@ function AccountInfo() {
         <Box className="box-title">Thông tin cá nhân</Box>
         <Box className="box-content">
           <strong>
-            {currentUser?.username} - {currentUser?.phone}
+            {currentUser?.username} &nbsp;•&nbsp; {currentUser?.phone}
           </strong>
           <div>Email: {currentUser?.email}</div>
         </Box>

@@ -21,8 +21,7 @@ import { toast } from 'react-toastify';
 const host = 'https://provinces.open-api.vn/api/';
 
 function Address() {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
-
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');

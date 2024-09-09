@@ -19,8 +19,8 @@ function Account() {
   ];
   const location = useLocation();
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = currentUser?.accessToken;
-  const id = currentUser?.data?._id;
+  const accessToken = useSelector((state) => state.auth.login?.accessToken);
+  const id = currentUser?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {

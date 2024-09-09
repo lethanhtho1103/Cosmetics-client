@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function AccountInfo() {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   return (
     <Box>
       <h2>Tài khoản của tôi</h2>

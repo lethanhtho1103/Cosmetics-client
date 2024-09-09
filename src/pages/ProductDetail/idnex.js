@@ -33,7 +33,7 @@ function ProductDetail() {
     { name: nameProduct, path: '' },
   ];
 
-  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   // const currentUser = { id: 1, name: 'John Doe' };
 

@@ -87,7 +87,7 @@ function LoginUser() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission behavior
+      e.preventDefault();
       handleSubmit();
     }
   };

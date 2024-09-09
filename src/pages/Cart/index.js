@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import CheckoutDialog from '~/components/CheckoutDialog';
 
 function Cart() {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const userId = currentUser?._id;
 
   const [selectAll, setSelectAll] = useState(false);

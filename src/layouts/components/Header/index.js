@@ -25,8 +25,8 @@ import shopService from '~/services/shopService';
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = currentUser?.accessToken;
-  const id = currentUser?.data?._id;
+  const accessToken = useSelector((state) => state.auth.login?.accessToken);
+  const id = currentUser?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -86,9 +86,9 @@ function Header() {
                       >
                         <Avatar
                           src={
-                            currentUser?.data?.avatar.startsWith('http')
-                              ? currentUser?.data?.avatar
-                              : `${baseUrl}/${currentUser?.data?.avatar}`
+                            currentUser?.avatar.startsWith('http')
+                              ? currentUser?.avatar
+                              : `${baseUrl}/${currentUser?.avatar}`
                           }
                           sx={{ width: 32, height: 32 }}
                         />
@@ -194,7 +194,7 @@ function Header() {
                       Đăng Xuất
                     </MenuItem>
                   </Menu>
-                  <div className="logged-in">Xin chào, {currentUser?.data?.username}</div>
+                  <div className="logged-in">Xin chào, {currentUser?.username}</div>
                 </>
               ) : (
                 <>

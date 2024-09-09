@@ -19,7 +19,7 @@ function OrderHistory() {
   const [tabIndex, setTabIndex] = useState(0);
   const [orders, setOrders] = useState([]);
 
-  const userId = useSelector((state) => state.auth.login?.currentUser?.data?._id);
+  const userId = useSelector((state) => state.auth.login?.currentUser?._id);
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const formatDate = (date) => format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
 

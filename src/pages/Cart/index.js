@@ -19,8 +19,8 @@ import { toast } from 'react-toastify';
 import CheckoutDialog from '~/components/CheckoutDialog';
 
 function Cart() {
-  const userId = useSelector((state) => state.auth.login?.currentUser?.data?._id);
-  const userAddress = useSelector((state) => state.auth.login?.currentUser?.data?.address);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser?.data);
+  const userId = currentUser?._id;
 
   const [selectAll, setSelectAll] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -255,9 +255,8 @@ function Cart() {
             open={openDialog}
             onClose={handleCloseDialog}
             cartItems={cartItems}
-            userAddress={userAddress}
             handleGetCart={handleGetCart}
-            userId={userId}
+            currentUser={currentUser}
           />
         </main>
       </Container>

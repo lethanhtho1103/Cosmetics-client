@@ -7,15 +7,33 @@ import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import './Account.scss';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import authService from '~/services/authService';
+import { logOutSuccess } from '~/redux/authSlice';
 
 function Account() {
   const routes = [
     { name: 'Trang chủ', path: '/' },
     { name: 'Tài khoản của tôi', path: '' },
   ];
-
   const location = useLocation();
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = currentUser?.accessToken;
+  const id = currentUser?.data?._id;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    try {
+      if (accessToken) {
+        authService.logOut(dispatch, id, navigate, accessToken);
+      } else {
+        dispatch(logOutSuccess());
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <UserLayout>
@@ -37,7 +55,7 @@ function Account() {
                   <Link to="/account/address" className={`${location.pathname === '/account/address' ? 'active' : ''}`}>
                     <strong>
                       <AddLocationOutlinedIcon />
-                      Địa chỉ
+                      Địa chỉ giao hàng
                     </strong>
                   </Link>
                 </li>
@@ -49,7 +67,7 @@ function Account() {
                     </strong>
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item" onClick={handleLogout}>
                   <strong>
                     <LogoutIcon />
                     Đăng xuất

@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import Container from '@mui/material/Container';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
 import authService from '~/services/authService';
@@ -134,6 +135,30 @@ function Header() {
                         style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
                       >
                         <Avatar /> Tài Khoản Của Tôi
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        to="http://localhost:3000/account/orders"
+                        style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
+                      >
+                        <Box
+                          sx={{
+                            width: '32px',
+                            height: '32px',
+                            mr: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: '#dbdbdb',
+                            justifyContent: 'center',
+                            ml: '-4px',
+                            borderRadius: '44px',
+                            color: '#fff',
+                          }}
+                        >
+                          <AddLocationOutlinedIcon />
+                        </Box>
+                        Địa Chỉ Giao Hàng
                       </Link>
                     </MenuItem>
                     <MenuItem>

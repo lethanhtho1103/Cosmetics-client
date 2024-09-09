@@ -16,7 +16,9 @@ import PayPal from '../PayPal';
 import { toast } from 'react-toastify';
 import orderService from '~/services/orderService';
 
-function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handleGetCart, userId }) {
+function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, currentUser }) {
+  const userId = currentUser?._id;
+
   const selectedItems = cartItems.filter((item) => item.selected);
   const totalPrice = selectedItems.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
 
@@ -72,9 +74,13 @@ function OrderConfirmationDialog({ open, onClose, cartItems, userAddress, handle
               <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 700, textTransform: 'uppercase' }}>
                 Thông tin giao hàng
               </Typography>
-              <Box className="box-content" sx={{ border: '1px solid #f6831f', padding: 2, borderRadius: 2, mb: 2 }}>
-                <strong>Lê Thành Thọ - 0972221953</strong>
-                <Typography sx={{ color: '#545453', fontWeight: 500 }}>{userAddress}</Typography>
+              <Box className="box-content" sx={{ border: '1px solid #ccc', padding: 2, borderRadius: 2, mb: 2 }}>
+                <strong>
+                  {currentUser?.username} &nbsp;•&nbsp; {currentUser?.phone}
+                </strong>
+                <Typography sx={{ color: '#545453', fontWeight: 400 }}>
+                  {`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}
+                </Typography>
               </Box>
             </Paper>
           </Grid>

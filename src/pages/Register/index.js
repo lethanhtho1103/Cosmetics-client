@@ -148,6 +148,13 @@ function Register() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent default form submission behavior
+      handleSubmit();
+    }
+  };
+
   return (
     <UserLayout>
       <main className="container-register page-wrapper">
@@ -161,7 +168,7 @@ function Register() {
             {isLoader && <CircularProgress sx={{ position: 'absolute', zIndex: 3000 }} />}
           </div>
 
-          <form>
+          <form onKeyDown={handleKeyDown}>
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Tên người dùng"

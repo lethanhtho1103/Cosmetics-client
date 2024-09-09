@@ -85,6 +85,13 @@ function LoginUser() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent default form submission behavior
+      handleSubmit();
+    }
+  };
+
   return (
     <UserLayout>
       <main className="container-login page-wrapper">
@@ -104,7 +111,7 @@ function LoginUser() {
               </div>
             </div>
           )}
-          <form>
+          <form onKeyDown={handleKeyDown}>
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Email"

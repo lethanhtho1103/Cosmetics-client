@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import ImageCarousel from '~/components/ImageCarousel';
 import UserLayout from '~/layouts/UserLayout';
 import img5 from '~/assets/image/img5.jpg';

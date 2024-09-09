@@ -1,5 +1,6 @@
 import UserLayout from '~/layouts/UserLayout';
-import { Box, Container } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';

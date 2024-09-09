@@ -1,19 +1,17 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Checkbox,
-  Container,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  MenuItem,
-  Select,
-  Slider,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';

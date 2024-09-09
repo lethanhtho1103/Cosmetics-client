@@ -1,6 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
-import { Button, CircularProgress, FormControl, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+
 import UserLayout from '~/layouts/UserLayout';
 import { useDispatch } from 'react-redux';
 

@@ -1,4 +1,11 @@
-import { Box, Typography, Button, Tabs, Tab, Card, CardContent, Grid } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';

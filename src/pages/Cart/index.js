@@ -1,5 +1,11 @@
 import UserLayout from '~/layouts/UserLayout';
-import { Box, Container, FormControlLabel, Grid, Typography, Checkbox, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import './Cart.scss';
 import { Link } from 'react-router-dom';

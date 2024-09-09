@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Box, MobileStepper, Button } from '@mui/material';
+import Box from '@mui/material/Box';
+import MobileStepper from '@mui/material/MobileStepper';
+import Button from '@mui/material/Button';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';

@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Box, Card, CardActionArea, CardContent, CardMedia, Pagination, Rating } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Pagination from '@mui/material/Pagination';
+import Rating from '@mui/material/Rating';
 import { Link } from 'react-router-dom';
 import './ListCard.scss';
 import { baseUrl } from '~/axios';

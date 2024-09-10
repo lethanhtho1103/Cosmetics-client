@@ -17,7 +17,7 @@ const publicRoutes = [
     component: Home,
   },
   {
-    path: '/:categoryName',
+    path: '/categories/:categoryName',
     component: Product,
   },
   {

@@ -92,16 +92,18 @@
     font-size: 14px;
     color: #000; // Updated text color
     margin-top: 20px;
-    color: #545453;
     padding: 0;
     list-style: none;
     margin: 0;
     li {
       margin-bottom: 8px;
       cursor: pointer;
-
-      &:hover {
-        color: #fbad15;
+      a {
+        color: #545453;
+        text-decoration: none;
+        &:hover {
+          color: #fbad15;
+        }
       }
     }
   }

@@ -49,9 +49,15 @@ function Footer() {
                 Về chúng tôi
               </Typography>
               <Box component="ul" className={styles.list1}>
-                <li>Giới thiệu</li>
-                <li>Liên hệ</li>
-                <li>Chăm sóc khách hàng</li>
+                <li>
+                  <Link to="http://localhost:3000/introduce">Giới thiệu</Link>
+                </li>
+                <li>
+                  <Link to="http://localhost:3000/contact">Liên hệ</Link>
+                </li>
+                <li>
+                  <Link to="http://localhost:3000/policy">Chính sách</Link>
+                </li>
               </Box>
             </Grid>
             <Grid item xs={12} sm={3}>

@@ -41,6 +41,7 @@ function Introduce() {
               </ul>
             </Box>
             <Box className="column-main">
+              <h2>Orange - Cửa Hàng Sức Khỏe Sắc Đẹp tại Việt Nam</h2>
               <Typography>
                 Chiều lòng các tín đồ làm đẹp tại Việt Nam và nhu cầu làm đẹp, chăm sóc sức khỏe của mọi khách hàng
                 không phân biệt giới tính, độ tuổi. Orange là một lựa chọn khó có thể bỏ qua cho tất cả mọi người.

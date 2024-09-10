@@ -10,6 +10,7 @@ import ProductDetail from '~/pages/ProductDetail/idnex';
 import Register from '~/pages/Register';
 import Address from '~/pages/Address';
 import Introduce from '~/pages/Introduce';
+import Contact from '~/pages/Contact';
 
 const publicRoutes = [
   {
@@ -43,6 +44,10 @@ const publicRoutes = [
   {
     path: '/introduce',
     component: Introduce,
+  },
+  {
+    path: '/contact',
+    component: Contact,
   },
   {
     path: '/login',

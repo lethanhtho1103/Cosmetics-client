@@ -87,7 +87,7 @@ function Footer() {
                       <Typography variant="h6" className={styles.title3}>
                         Điện thoại
                       </Typography>
-                      <span>+0972221953</span>
+                      <span>+097-222-1953</span>
                     </Box>
                   </Box>
                 </li>
@@ -100,7 +100,7 @@ function Footer() {
                       <Typography variant="h6" className={styles.title3}>
                         Vị trí
                       </Typography>
-                      <span>Orange, đường 3/2, P. Xuân Khánh, Q. Ninh Kiều, TP. Cần Thơ.</span>
+                      <span>167A, hẻm 51, đường 3/2, P. Xuân Khánh, Q. Ninh Kiều, TP. Cần Thơ.</span>
                     </Box>
                   </Box>
                 </li>

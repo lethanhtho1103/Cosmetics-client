@@ -25,6 +25,17 @@ const orderService = {
       throw new Error(error.response?.data?.message || 'Thất bại');
     }
   },
+  async updateStatus(orderId, status) {
+    try {
+      const response = await axios.put('/api/order/update/status', {
+        orderId,
+        status,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Cập nhật trạng thái thất bại');
+    }
+  },
 };
 
 export default orderService;

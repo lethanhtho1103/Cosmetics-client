@@ -7,21 +7,25 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import noOrderImg from '~/assets/image/no_order.png';
 import { useSelector } from 'react-redux';
 import orderService from '~/services/orderService';
 import { baseUrl } from '~/axios';
 import { format } from 'date-fns';
+import { toast } from 'react-toastify';
+import cartService from '~/services/cartService';
 
 function OrderHistory() {
   const [tabIndex, setTabIndex] = useState(0);
   const [orders, setOrders] = useState([]);
-
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const userId = useSelector((state) => state.auth.login?.currentUser?._id);
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const formatDate = (date) => format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
+
+  const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -36,6 +40,12 @@ function OrderHistory() {
     handleGetAllOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
+
+  useEffect(() => {
+    const newFilteredOrders = filterOrdersByStatus();
+    setFilteredOrders(newFilteredOrders);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orders, tabIndex]);
 
   const filterOrdersByStatus = () => {
     switch (tabIndex) {
@@ -52,7 +62,38 @@ function OrderHistory() {
     }
   };
 
-  const filteredOrders = filterOrdersByStatus();
+  const handleReceivedOrder = async (orderId) => {
+    const status = 'delivered';
+    await orderService.updateStatus(orderId, status);
+    await handleGetAllOrder();
+    toast.success('Nhận đơn hàng thành công.');
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    const status = 'denied';
+    await orderService.updateStatus(orderId, status);
+    await handleGetAllOrder();
+    toast.success('Đơn hàng đã được hủy.');
+  };
+
+  const handleBuyAgain = async (orderId) => {
+    try {
+      const order = orders.find((order) => order._id === orderId);
+      if (!order) return;
+      for (const orderDetail of order.orderDetails) {
+        await cartService.addToCart(userId, orderDetail.product_id, orderDetail.quantity);
+      }
+      navigate('/cart', { replace: true });
+      toast.success('Sản phẩm đã được thêm vào giỏ hàng.');
+    } catch (error) {
+      console.error(error);
+      toast.error('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+    }
+  };
+
+  const handleReviewOrder = (orderId) => {
+    console.log(`Review order with ID: ${orderId}`);
+  };
 
   return (
     <Box sx={{ padding: '0px 20px 20px' }}>
@@ -111,50 +152,56 @@ function OrderHistory() {
                     </Box>
                   </Grid>
                   {order?.orderDetails?.map((orderDetail, index) => (
-                    <Grid item xs={12} container sx={{ marginTop: '12px', mb: '12px' }} key={index}>
-                      <Grid item xs={12} md={2}>
-                        <img
-                          src={`${baseUrl}/${orderDetail?.product_image}`}
-                          alt={orderDetail?.product_name}
-                          style={{ width: '90%', borderRadius: '4px' }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={10}>
-                        <Typography variant="body1" sx={{ fontWeight: 500, width: '90%' }}>
-                          {orderDetail?.product_name}
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <Typography
-                            variant="body2"
-                            sx={{ mt: '6px ', color: '#0000008a', display: 'flex', alignItems: 'center' }}
-                          >
-                            Số lượng:
-                            <Typography sx={{ color: '#000', fontWeight: 500, ml: '4px' }}>
-                              x{orderDetail?.quantity}
-                            </Typography>
+                    <Link
+                      to={`http://localhost:3000/product-detail/${orderDetail?.product_name}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Grid item xs={12} container sx={{ marginTop: '12px', mb: '12px' }} key={index}>
+                        <Grid item xs={12} md={2}>
+                          <img
+                            src={`${baseUrl}/${orderDetail?.product_image}`}
+                            alt={orderDetail?.product_name}
+                            style={{ width: '90%', borderRadius: '4px' }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={10}>
+                          <Typography variant="body1" sx={{ fontWeight: 500, width: '90%', color: '#000 !important' }}>
+                            {orderDetail?.product_name}
                           </Typography>
-                          <Typography>{formatNumber(orderDetail?.unit_price)}₫</Typography>
-                        </Box>
-                        <Box sx={{ marginTop: '10px' }}>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            disabled
-                            sx={{
-                              fontSize: '12px',
-                              '&.Mui-disabled': {
-                                color: '#26aa99',
-                                borderColor: '#26aa99',
-                              },
-                            }}
-                          >
-                            Trả hàng miễn phí 15 ngày
-                          </Button>
-                        </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ mt: '6px ', color: '#0000008a !important', display: 'flex', alignItems: 'center' }}
+                            >
+                              Số lượng:
+                              <Typography sx={{ color: '#000 !important', fontWeight: 500, ml: '4px' }}>
+                                x{orderDetail?.quantity}
+                              </Typography>
+                            </Typography>
+                            <Typography sx={{ color: '#000 !important' }}>
+                              {formatNumber(orderDetail?.unit_price)}₫
+                            </Typography>
+                          </Box>
+                          <Box sx={{ marginTop: '10px' }}>
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled
+                              sx={{
+                                fontSize: '12px',
+                                '&.Mui-disabled': {
+                                  color: '#26aa99 !important',
+                                  borderColor: '#26aa99',
+                                },
+                              }}
+                            >
+                              Trả hàng miễn phí 15 ngày
+                            </Button>
+                          </Box>
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    </Link>
                   ))}
-
                   <Grid
                     item
                     xs={12}
@@ -190,18 +237,72 @@ function OrderHistory() {
                       {formatNumber(order?.total_price)}₫
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Typography
-                        variant="body2"
-                        sx={{ width: '45%', textAlign: 'left', color: '#0000008a', fontSize: '12px' }}
-                      >
-                        Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao đến bạn và sản phẩm nhận được
-                        không có vấn đề nào.
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Button variant="contained" color="primary" sx={{ marginRight: '10px', color: '#fff' }}>
-                          Mua Lại
-                        </Button>
-                        <Button variant="outlined">Xem Chi Tiết Hủy Đơn</Button>
+                      {order?.status === 'accepted' && (
+                        <Typography
+                          variant="body2"
+                          sx={{ width: '45%', textAlign: 'left', color: '#0000008a', fontSize: '12px' }}
+                        >
+                          Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao đến bạn và sản phẩm nhận được
+                          không có vấn đề nào.
+                        </Typography>
+                      )}
+                      {order?.status === 'denied' && (
+                        <Typography
+                          variant="body2"
+                          sx={{ width: '45%', textAlign: 'left', color: '#0000008a', fontSize: '12px' }}
+                        >
+                          Đơn hàng đã bị hủy.
+                        </Typography>
+                      )}
+
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
+                        {order?.status === 'pending' && (
+                          <Button variant="contained" color="error" onClick={() => handleCancelOrder(order._id)}>
+                            Hủy đơn
+                          </Button>
+                        )}
+
+                        {order?.status === 'accepted' && (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ color: '#fff' }}
+                            onClick={() => handleReceivedOrder(order._id)}
+                          >
+                            Đã nhận được hàng
+                          </Button>
+                        )}
+
+                        {order?.status === 'delivered' && (
+                          <>
+                            <Button
+                              variant="outlined"
+                              sx={{ marginRight: '10px', color: 'var(--primary-color)' }}
+                              onClick={() => handleReviewOrder(order._id)}
+                            >
+                              Đánh giá
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              sx={{ color: '#fff' }}
+                              onClick={() => handleBuyAgain(order._id)}
+                            >
+                              Mua lại
+                            </Button>
+                          </>
+                        )}
+
+                        {order?.status === 'denied' && (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ color: '#fff' }}
+                            onClick={() => handleBuyAgain(order._id)}
+                          >
+                            Mua lại
+                          </Button>
+                        )}
                       </Box>
                     </Box>
                   </Grid>

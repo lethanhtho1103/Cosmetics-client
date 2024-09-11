@@ -22,39 +22,52 @@ import { baseUrl } from '~/axios';
 import { useSelector } from 'react-redux';
 import cartService from '~/services/cartService';
 import { toast } from 'react-toastify';
+import commentService from '~/services/commentService';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 function ProductDetail() {
   const { nameProduct } = useParams();
   const navigate = useNavigate();
-  const [productDetail, setProductDetail] = useState({});
-  const userReview = true;
   const routes = [
     { name: 'Trang chủ', path: '/' },
     { name: nameProduct, path: '' },
   ];
-
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-
-  // const currentUser = { id: 1, name: 'John Doe' };
-
-  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [productDetail, setProductDetail] = useState({});
+  const [editingReviewId, setEditingReviewId] = useState('');
   const [rating, setRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
   const [comment, setComment] = useState('');
   const [quantity, setQuantity] = useState(1);
 
   const handleEditClick = (review) => {
-    setEditingReviewId(review.userId);
-    setRating(review.rating);
-    setComment(review.comment);
+    setEditingReviewId(review?._id);
+    setRating(review?.star);
+    setComment(review?.content);
   };
 
-  const handleUpdateReview = () => {
-    console.log('Updated review:', { rating, comment });
+  const handleUpdateReview = async () => {
+    try {
+      const res = await commentService.updateComment(currentUser?._id, productDetail?._id, rating, comment);
+      handleGetProductByName();
+      handleGetCommentByProductId(productDetail?._id);
+      toast.success(res.message);
+    } catch (error) {
+      console.error('Failed to fetch comments', error);
+    }
     setEditingReviewId(null);
   };
 
-  const handleDeleteReview = (reviewId) => {
-    console.log('Deleted review with ID:', reviewId);
+  const handleDeleteReview = async () => {
+    try {
+      const res = await commentService.deleteComment(currentUser?._id, productDetail?._id);
+      handleGetProductByName();
+      handleGetCommentByProductId(productDetail?._id);
+      handleClose();
+      toast.success(res.message);
+    } catch (error) {
+      console.error('Failed to fetch comments', error);
+    }
   };
 
   const handleSubmitReview = () => {
@@ -84,14 +97,47 @@ function ProductDetail() {
   };
 
   const handleGetProductByName = async () => {
-    const res = await productService.getProductByName({ nameProduct });
-    setProductDetail(res.data);
+    try {
+      const res = await productService.getProductByName({ nameProduct });
+      setProductDetail(res.data);
+    } catch (error) {
+      console.error('Failed to fetch product details', error);
+    }
+  };
+
+  const handleGetCommentByProductId = async (productId) => {
+    try {
+      const res = await commentService.getCommentByProductId(productId);
+      setReviews(res.data);
+    } catch (error) {
+      console.error('Failed to fetch comments', error);
+    }
   };
 
   useEffect(() => {
-    handleGetProductByName();
+    const fetchProductAndComments = async () => {
+      await handleGetProductByName(); // Wait for product details to be set
+    };
+
+    fetchProductAndComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameProduct]);
+
+  useEffect(() => {
+    if (productDetail?._id) {
+      handleGetCommentByProductId(productDetail._id);
+    }
+  }, [productDetail]);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <UserLayout>
@@ -179,31 +225,31 @@ function ProductDetail() {
             </Box>
           </Box>
           <Box sx={{ pb: 2 }}>
-            {productDetail?.reviews?.map((review, index) => (
+            {reviews?.map((review, index) => (
               <Paper key={index} sx={{ p: 2, mb: 3, boxShadow: 1 }} className="comment-user">
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="subtitle1" sx={{ mr: 2 }}>
-                      <strong>{review.user}</strong>
+                      <strong>{review?.user_id?.username}</strong>
                     </Typography>
-                    <Rating value={review.rating} readOnly size="small" />
+                    <Rating value={review?.star} readOnly size="small" />
                   </Box>
-                  {review.userId === currentUser.id && (
+                  {review?.user_id?._id === currentUser?._id && (
                     <Box>
                       <IconButton size="small" sx={{ color: '#303f9f' }} onClick={() => handleEditClick(review)}>
                         <EditIcon />
                       </IconButton>
-                      <IconButton sx={{ color: 'red' }} size="small" onClick={() => handleDeleteReview(review.userId)}>
+                      <IconButton sx={{ color: 'red' }} size="small" onClick={handleClickOpen}>
                         <DeleteIcon />
                       </IconButton>
                     </Box>
                   )}
                 </Box>
                 <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                  {review.time}
+                  {review?.comment_date}
                 </Typography>
-                <Typography variant="body1">{review.comment}</Typography>
-                {editingReviewId === review.userId && (
+                <Typography variant="body1">{review?.content}</Typography>
+                {editingReviewId === review?._id && (
                   <Box sx={{ mt: 2 }}>
                     <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
                     <TextField
@@ -222,7 +268,7 @@ function ProductDetail() {
                     </Box>
                   </Box>
                 )}
-                {!userReview && (
+                {false && (
                   <Box sx={{ mt: 4 }}>
                     <Typography variant="h6" gutterBottom>
                       Đánh giá
@@ -243,7 +289,7 @@ function ProductDetail() {
                       color="primary"
                       sx={{ mt: 2 }}
                       onClick={handleSubmitReview}
-                      disabled={rating === 0 || comment.trim() === ''}
+                      disabled={rating === 0 || comment?.trim() === ''}
                     >
                       Lưu đánh giá
                     </Button>
@@ -252,6 +298,30 @@ function ProductDetail() {
               </Paper>
             ))}
           </Box>
+          <React.Fragment>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth
+            >
+              <DialogTitle id="alert-dialog-title">Xóa đánh giá?</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Bạn có chắc chắn muốn xóa đánh giá này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button sx={{ color: 'black', borderColor: '#ccc' }} variant="outlined" onClick={handleClose}>
+                  Hủy
+                </Button>
+                <Button sx={{ color: '#fff', background: 'red' }} variant="contained" onClick={handleDeleteReview}>
+                  Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </React.Fragment>
         </main>
       </Container>
     </UserLayout>

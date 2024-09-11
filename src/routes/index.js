@@ -11,6 +11,7 @@ import Register from '~/pages/Register';
 import Address from '~/pages/Address';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
+import Policy from '~/pages/Policy';
 
 const publicRoutes = [
   {
@@ -48,6 +49,10 @@ const publicRoutes = [
   {
     path: '/contact',
     component: Contact,
+  },
+  {
+    path: '/policy',
+    component: Policy,
   },
   {
     path: '/login',

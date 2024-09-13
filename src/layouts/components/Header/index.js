@@ -2,7 +2,7 @@ import './Header.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
@@ -21,44 +21,53 @@ import { baseUrl } from '~/axios';
 import authService from '~/services/authService';
 import { logOutSuccess } from '~/redux/authSlice';
 import shopService from '~/services/shopService';
+import { useCart } from '~/contexts/CartContext';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [shops, setShops] = useState([]);
+  const { cart } = useCart();
+
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = useSelector((state) => state.auth.login?.accessToken);
-  const id = currentUser?._id;
+  const userId = currentUser?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [shops, setShops] = useState([]);
-
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const handleLogout = () => {
+  const handleClick = useCallback((event) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const handleLogout = useCallback(() => {
     try {
       if (accessToken) {
-        authService.logOut(dispatch, id, navigate, accessToken);
+        authService.logOut(dispatch, userId, navigate, accessToken);
       } else {
         dispatch(logOutSuccess());
       }
     } catch (error) {
       console.error(error);
     }
-  };
-  const getAllShops = async () => {
+  }, [accessToken, dispatch, navigate, userId]);
+
+  const getAllShops = useCallback(async () => {
     const res = await shopService.getAllShops();
     setShops(res);
-  };
+  }, []);
 
   useEffect(() => {
     getAllShops();
-  }, []);
+  }, [getAllShops]);
+
+  const avatarUrl = useMemo(() => {
+    return currentUser?.avatar.startsWith('http') ? currentUser?.avatar : `${baseUrl}/${currentUser?.avatar}`;
+  }, [currentUser?.avatar]);
 
   return (
     <Container disableGutters maxWidth={false} className="wrapper">
@@ -84,14 +93,7 @@ function Header() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                       >
-                        <Avatar
-                          src={
-                            currentUser?.avatar.startsWith('http')
-                              ? currentUser?.avatar
-                              : `${baseUrl}/${currentUser?.avatar}`
-                          }
-                          sx={{ width: 32, height: 32 }}
-                        />
+                        <Avatar src={avatarUrl} sx={{ width: 32, height: 32 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -131,7 +133,7 @@ function Header() {
                   >
                     <MenuItem>
                       <Link
-                        to="http://localhost:3000/account"
+                        to="/account"
                         style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
                       >
                         <Avatar /> Tài Khoản Của Tôi
@@ -139,23 +141,10 @@ function Header() {
                     </MenuItem>
                     <MenuItem>
                       <Link
-                        to="http://localhost:3000/account/address"
+                        to="/account/address"
                         style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
                       >
-                        <Box
-                          sx={{
-                            width: '32px',
-                            height: '32px',
-                            mr: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            backgroundColor: '#dbdbdb',
-                            justifyContent: 'center',
-                            ml: '-4px',
-                            borderRadius: '44px',
-                            color: '#fff',
-                          }}
-                        >
+                        <Box className="icon-bg">
                           <AddLocationOutlinedIcon />
                         </Box>
                         Địa Chỉ Giao Hàng
@@ -163,30 +152,16 @@ function Header() {
                     </MenuItem>
                     <MenuItem>
                       <Link
-                        to="http://localhost:3000/account/orders"
+                        to="/account/orders"
                         style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#000' }}
                       >
-                        <Box
-                          sx={{
-                            width: '32px',
-                            height: '32px',
-                            mr: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            backgroundColor: '#dbdbdb',
-                            justifyContent: 'center',
-                            ml: '-4px',
-                            borderRadius: '44px',
-                            color: '#fff',
-                          }}
-                        >
+                        <Box className="icon-bg">
                           <InventoryOutlinedIcon />
                         </Box>
                         Đơn Mua
                       </Link>
                     </MenuItem>
                     <Divider />
-
                     <MenuItem onClick={handleLogout}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
@@ -211,13 +186,12 @@ function Header() {
                 </>
               )}
             </Box>
-            <Link to="http://localhost:3000/cart" className="cart">
+            <Link to="/cart" className="cart">
               <ShoppingCartIcon sx={{ marginRight: '8px' }} />
               <div className="content">
                 <div className="text">Giỏ hàng</div>
-                <div style={{ fontWeight: 700 }}>0 Sản phẩm</div>
+                <div style={{ fontWeight: 700 }}>{cart?.items?.length} Sản phẩm</div>
               </div>
-              {/* <div className="logged-in">Xin chào, Thành Thọ</div> */}
             </Link>
           </Box>
         </div>
@@ -229,7 +203,7 @@ function Header() {
               <li key={shop.id} className="megamenu-item">
                 <div className="submenu-content">
                   <div className="block-list">
-                    {shop.Cosmetics.map((cosmetic, index) => (
+                    {shop.Cosmetics.map((cosmetic) => (
                       <div key={cosmetic.id} className="block-item">
                         <div className="category-link">
                           <Link to="#">{cosmetic.name}</Link>
@@ -237,7 +211,7 @@ function Header() {
                         <ul className="megamenu-sub-items">
                           {cosmetic.categories.map((category) => (
                             <li key={category.id} className="megamenu-sub-item">
-                              <Link to={`http://localhost:3000/categories/${category.name}`}>{category.name}</Link>
+                              <Link to={`/categories/${category.name}`}>{category.name}</Link>
                             </li>
                           ))}
                         </ul>

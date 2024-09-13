@@ -17,11 +17,12 @@ import { useSelector } from 'react-redux';
 import { baseUrl } from '~/axios';
 import { toast } from 'react-toastify';
 import CheckoutDialog from '~/components/CheckoutDialog';
+import { useCart } from '~/contexts/CartContext';
 
 function Cart() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const userId = currentUser?._id;
-
+  const { updateCart } = useCart();
   const [selectAll, setSelectAll] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -93,14 +94,16 @@ function Cart() {
     const res = await cartService.getCartByUserId({ userId });
     const initializedCartItems = res?.data?.items?.map((item) => ({
       ...item,
-      selected: false, // Initialize the selected property
+      selected: false,
     }));
     setCartItems(initializedCartItems);
+    updateCart(res?.data);
   };
 
   const handleDeleteCart = async (productId) => {
     const res = await cartService.deleteCart({ userId, productId });
     handleGetCart();
+    updateCart(res?.data);
     toast.success(res?.message);
   };
 
@@ -131,13 +134,18 @@ function Cart() {
                   {cartItems?.map((item, index) => (
                     <Box key={item?.product_id?._id} className="cart-item">
                       <Box className="cart-item-details">
-                        <img
-                          src={`${baseUrl}/${item?.product_id?.image}`}
-                          alt={item?.product_id?.name}
-                          className="cart-item-image"
-                        />
+                        <Link to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}>
+                          <img
+                            src={`${baseUrl}/${item?.product_id?.image}`}
+                            alt={item?.product_id?.name}
+                            className="cart-item-image"
+                          />
+                        </Link>
                         <Box className="cart-item-info">
-                          <Link className="cart-item-info-name" to="/">
+                          <Link
+                            className="cart-item-info-name"
+                            to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}
+                          >
                             {item?.product_id?.name}
                           </Link>
                           <Typography className="cart-item-info-price">

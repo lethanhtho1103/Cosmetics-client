@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 import Comment from '~/components/Comment';
 import commentService from '~/services/commentService';
 import orderService from '~/services/orderService';
+import { useCart } from '~/contexts/CartContext';
 
 function ProductDetail() {
   const { nameProduct } = useParams();
@@ -34,6 +35,7 @@ function ProductDetail() {
     [nameProduct],
   );
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const { updateCart } = useCart();
   const [productDetail, setProductDetail] = useState({});
   const [reviews, setReviews] = useState([]);
   const [quantity, setQuantity] = useState(1);
@@ -52,11 +54,14 @@ function ProductDetail() {
       if (currentUser) {
         const userId = currentUser._id;
         const res = await cartService.addToCart(userId, productId, quantity);
+        const cartRes = await cartService.getCartByUserId({ userId });
+        updateCart(cartRes?.data);
         toast.success(res?.message);
       } else {
         navigate('/login');
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser, navigate, quantity],
   );
 
@@ -176,7 +181,7 @@ function ProductDetail() {
                     onClick={() => handleAddToCart(productDetail?._id, quantity)}
                   >
                     <ShoppingCartIcon fontSize="small" className="cart-icon" />
-                    Thêm vào giỏ
+                    Thêm vào giỏ hàng
                   </Button>
                   <Button variant="contained" className="buy-btn" onClick={handleBuyNow}>
                     Mua ngay

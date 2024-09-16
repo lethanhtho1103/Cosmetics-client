@@ -16,11 +16,14 @@ import { baseUrl } from '~/axios';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import cartService from '~/services/cartService';
+// import { Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField } from '@mui/material';
+// import commentService from '~/services/commentService';
 
 function OrderHistory() {
   const [tabIndex, setTabIndex] = useState(0);
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
+
   const userId = useSelector((state) => state.auth.login?.currentUser?._id);
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const formatDate = (date) => format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
@@ -35,6 +38,37 @@ function OrderHistory() {
     const res = await orderService.getOrderById(userId);
     setOrders(res?.data);
   };
+  // const [openReviewDialog, setOpenReviewDialog] = useState(false);
+  // const [currentOrderDetails, setCurrentOrderDetails] = useState(null);
+  // const [rating, setRating] = useState(0);
+  // const [comment, setComment] = useState('');
+  // const handleClickOpenReviewDialog = (orderDetails) => {
+  //   console.log(orderDetails);
+  //   setCurrentOrderDetails(orderDetails);
+  //   setOpenReviewDialog(true);
+  // };
+
+  // const handleCloseReviewDialog = () => {
+  //   setOpenReviewDialog(false);
+  //   setRating(0);
+  //   setComment('');
+  // };
+
+  // const handleSubmitReview = async () => {
+  //   if (rating === 0 || comment.trim() === '') return;
+  //   try {
+  //     for (const detail of currentOrderDetails) {
+  //       const productId = detail.product_id;
+  //       await commentService.createComment(userId, productId, rating, comment);
+  //     }
+  //     toast.success('Đánh giá đã được lưu.');
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error('Có lỗi xảy ra khi lưu đánh giá.');
+  //   }
+
+  //   handleCloseReviewDialog();
+  // };
 
   useEffect(() => {
     handleGetAllOrder();
@@ -89,10 +123,6 @@ function OrderHistory() {
       console.error(error);
       toast.error('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
     }
-  };
-
-  const handleReviewOrder = (orderId) => {
-    console.log(`Review order with ID: ${orderId}`);
   };
 
   return (
@@ -275,13 +305,13 @@ function OrderHistory() {
 
                         {order?.status === 'delivered' && (
                           <>
-                            <Button
+                            {/* <Button
                               variant="outlined"
                               sx={{ marginRight: '10px', color: 'var(--primary-color)' }}
-                              onClick={() => handleReviewOrder(order._id)}
+                              onClick={() => handleClickOpenReviewDialog(order?.orderDetails)}
                             >
                               Đánh giá
-                            </Button>
+                            </Button> */}
                             <Button
                               variant="contained"
                               color="primary"
@@ -322,6 +352,35 @@ function OrderHistory() {
           </Link>
         </Box>
       )}
+      {/* <Dialog open={openReviewDialog} onClose={handleCloseReviewDialog}>
+        <DialogTitle>Viết Đánh giá</DialogTitle>
+        <DialogContent>
+          <Box sx={{ mb: 4 }}>
+            <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
+            <TextField
+              fullWidth
+              multiline
+              minRows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              variant="outlined"
+              placeholder="Viết đánh giá của bạn tại đây..."
+              sx={{ mt: 2 }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            sx={{ mt: 2, color: '#fff' }}
+            onClick={handleSubmitReview}
+            disabled={rating === 0 || comment?.trim() === ''}
+          >
+            Lưu đánh giá
+          </Button>
+          <Button onClick={handleCloseReviewDialog}>Hủy</Button>
+        </DialogActions>
+      </Dialog> */}
     </Box>
   );
 }

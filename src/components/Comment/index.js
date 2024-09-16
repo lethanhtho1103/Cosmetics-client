@@ -45,7 +45,7 @@ const Comment = ({
       handleGetCommentByProductId(productDetail?._id);
       toast.success(res.message);
     } catch (error) {
-      console.error('Failed to update comment', error);
+      toast.error('Cập nhật đánh giá thất bại');
     }
     setEditingReviewId(null);
   }, [currentUser, productDetail, rating, comment, handleGetProductByName, handleGetCommentByProductId]);
@@ -60,7 +60,7 @@ const Comment = ({
       handleClose();
       toast.success(res.message);
     } catch (error) {
-      console.error('Failed to delete comment', error);
+      toast.error('Xóa đánh giá thất bại.');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, productDetail, handleGetProductByName, handleGetCommentByProductId]);
@@ -72,7 +72,7 @@ const Comment = ({
       handleGetCommentByProductId(productDetail?._id);
       toast.success(res.message);
     } catch (error) {
-      console.error('Failed to submit comment', error);
+      toast.error('Lưu đánh giá thất bại.');
     }
   }, [currentUser, productDetail, rating, comment, handleGetProductByName, handleGetCommentByProductId]);
 

@@ -158,7 +158,7 @@ function Header() {
                         <Box className="icon-bg">
                           <InventoryOutlinedIcon />
                         </Box>
-                        Đơn Mua
+                        Đơn Hàng
                       </Link>
                     </MenuItem>
                     <Divider />
@@ -190,7 +190,7 @@ function Header() {
               <ShoppingCartIcon sx={{ marginRight: '8px' }} />
               <div className="content">
                 <div className="text">Giỏ hàng</div>
-                <div style={{ fontWeight: 700 }}>{cart?.items?.length} Sản phẩm</div>
+                <div style={{ fontWeight: 700 }}>{cart?.items?.length || 0} Sản phẩm</div>
               </div>
             </Link>
           </Box>

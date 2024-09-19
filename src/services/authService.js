@@ -10,6 +10,14 @@ const authService = {
     return res.data;
   },
 
+  async loginAdmin(email, password) {
+    const res = await axios.post('/api/authentication/login-admin', {
+      email,
+      password,
+    });
+    return res.data;
+  },
+
   async updateUser(userId, username, phone, address, province, district, ward) {
     try {
       const res = await axios.put(`/api/authentication/update-user/${userId}`, {

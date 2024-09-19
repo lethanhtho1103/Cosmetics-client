@@ -1,0 +1,53 @@
+.sidebar {
+  width: 250px;
+  background-color: #001f3f;
+  height: 100vh;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-link {
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.logo-avatar {
+  width: 56px;
+  height: 56px;
+}
+
+.logo-text {
+  margin-left: 16px !important;
+  color: #f1c40f;
+}
+
+.menu {
+  margin-top: 20px;
+}
+
+.menu-icon {
+  color: white;
+}
+
+.menu-text {
+  color: white;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: inherit;
+  &.active,
+  &:hover {
+    .menu-icon {
+      color: #f1c40f;
+    }
+    .menu-text {
+      color: #f1c40f !important;
+    }
+  }
+}

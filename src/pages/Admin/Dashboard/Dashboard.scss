@@ -1,0 +1,87 @@
+.dashboard-container {
+  padding: 30px 20px 20px 20px;
+  // background-color: #eae2e24a;
+  padding-bottom: 50px;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.card-container {
+  display: flex; /* Dùng flex để các thẻ card nằm hàng ngang */
+  gap: 20px; /* Khoảng cách giữa các thẻ */
+  justify-content: space-between; /* Căn đều các thẻ */
+  flex-wrap: wrap; /* Cho phép tự động xuống hàng nếu không đủ chỗ */
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 80px auto;
+  padding: 10px;
+  border: 1px solid rgba(194, 194, 197, 0.574);
+  height: 120px;
+  width: 250px;
+  border-radius: 10px;
+  transition: 0.2s;
+  cursor: pointer;
+  background-color: #fff;
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 0px 5px #e67524f2;
+  }
+}
+
+.icon-container {
+  border-radius: 50%;
+  font-size: 26px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-person {
+  background-color: #cdf1ef;
+  color: #05b9aa;
+}
+
+.icon-group {
+  background-color: #cbe2ff;
+  color: #05b9aa;
+}
+
+.icon-business {
+  background-color: #e5cff7;
+  color: #05b9aa;
+}
+
+.card-text {
+  color: #fff;
+}
+
+.card-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.card-title {
+  font-size: 20px;
+  color: #fff;
+}
+
+.player-card {
+  background-color: #7978e9;
+}
+
+.coach-card {
+  background-color: #4747a1;
+}
+
+.user-card {
+  background-color: #f3797e;
+}
+
+.company-card {
+  background-color: #f36944;
+}

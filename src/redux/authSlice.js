@@ -5,6 +5,8 @@ const authSlice = createSlice({
   initialState: {
     login: {
       currentUser: null,
+      currentAdmin: null,
+      accessToken_admin: null,
       accessToken: '',
       isFetching: false,
       error: false,
@@ -25,6 +27,14 @@ const authSlice = createSlice({
       state.login.currentUser = action.payload?.data;
       if (action.payload?.accessToken) {
         state.login.accessToken = action.payload?.accessToken;
+      }
+      state.login.error = false;
+    },
+    loginAdminSuccess: (state, action) => {
+      state.login.isFetching = false;
+      state.login.currentAdmin = action.payload?.data_admin;
+      if (action.payload?.data_admin && action.payload?.accessToke) {
+        state.login.accessToken_admin = action.payload?.accessToken;
       }
       state.login.error = false;
     },
@@ -52,6 +62,12 @@ const authSlice = createSlice({
       state.login.accessToken = '';
       state.login.error = false;
     },
+    logOutAdminSuccess: (state) => {
+      state.login.isFetching = false;
+      state.login.currentAdmin = null;
+      state.login.accessToken_admin = '';
+      state.login.error = false;
+    },
     logOutFailed: (state) => {
       state.login.isFetching = false;
       state.login.error = true;
@@ -66,11 +82,14 @@ export const {
   loginStart,
   loginFailed,
   loginSuccess,
+  loginAdminSuccess,
   registerStart,
   registerSuccess,
   registerFailed,
   logOutStart,
   logOutSuccess,
+  logOutAdminSuccess,
+
   logOutFailed,
 } = authSlice.actions;
 

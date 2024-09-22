@@ -24,7 +24,6 @@ function Sidebar() {
           Orange
         </Typography>
       </NavLink>
-
       <List component="nav" className="menu">
         <NavLink to="/admin/dashboard" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
           <ListItem button>

@@ -9,6 +9,15 @@ const shopService = {
       console.error(error);
     }
   },
+
+  async getAllCategories() {
+    try {
+      const res = await axios.get('/api/category');
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 
 export default shopService;

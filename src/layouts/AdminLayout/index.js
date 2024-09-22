@@ -11,7 +11,7 @@ function AdminLayout({ children }) {
       </Grid>
       <Grid item xs={12} md={9} lg={10}>
         <Header />
-        <Box sx={{ p: 2, backgroundColor: '#f4f7ff', height: 'calc(100vh - 80px)' }}>{children}</Box>
+        <Box sx={{ p: 2, backgroundColor: '#f4f7ff', minHeight: 'calc(100vh - 64px)' }}>{children}</Box>
       </Grid>
     </Grid>
   );

@@ -11,7 +11,6 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Public Routes */}
           {publicRoutes.map((route, index) => {
             let Layout = Fragment;
             if (route.layout) {
@@ -19,7 +18,6 @@ function App() {
             }
             const Page = route.component;
 
-            // Redirect logged-in users away from login or register pages
             if (currentUser && (route.path === '/login' || route.path === '/register')) {
               return <Route key={index} path={route.path} element={<Navigate to="/" replace />} />;
             }

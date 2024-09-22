@@ -14,6 +14,7 @@ import Contact from '~/pages/Contact';
 import Policy from '~/pages/Policy';
 import Dashboard from '~/pages/Admin/Dashboard';
 import LoginAdmin from '~/pages/Admin/LoginAdmin';
+import ProductsManagement from '~/pages/Admin/Product';
 
 const publicRoutes = [
   {
@@ -74,7 +75,11 @@ const adminRoutes = [
   {
     path: '/admin/dashboard',
     component: Dashboard,
-    isLogin: true,
+    isAdmin: true,
+  },
+  {
+    path: '/admin/products-management',
+    component: ProductsManagement,
     isAdmin: true,
   },
   {

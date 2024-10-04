@@ -66,7 +66,7 @@ function Header() {
   }, [getAllShops]);
 
   const avatarUrl = useMemo(() => {
-    return currentUser?.avatar.startsWith('http') ? currentUser?.avatar : `${baseUrl}/${currentUser?.avatar}`;
+    return currentUser?.avatar?.startsWith('http') ? currentUser?.avatar : `${baseUrl}/${currentUser?.avatar}`;
   }, [currentUser?.avatar]);
 
   return (

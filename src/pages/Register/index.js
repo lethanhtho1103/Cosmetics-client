@@ -25,6 +25,7 @@ function Register() {
   const addressRef = useRef();
   const phoneRef = useRef();
   const avatarRef = useRef();
+  const dobRef = useRef(); // Reference for date of birth
 
   const [emailInput, setEmail] = useState('');
   const [passInput, setPassInput] = useState('');
@@ -34,12 +35,14 @@ function Register() {
   const [phoneInput, setPhoneInput] = useState('');
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [dobInput, setDobInput] = useState('');
   const [errClassEmail, setErrClassEmail] = useState(false);
   const [errClassPass, SetErrClassPass] = useState(false);
   const [errClassUsername, setErrClassUsername] = useState(false);
   const [errClassConfirmPass, setErrClassConfirmPass] = useState(false);
   const [errClassAddress, setErrClassAddress] = useState(false);
   const [errClassPhone, setErrClassPhone] = useState(false);
+  const [errClassDob, setErrClassDob] = useState(false);
 
   const [isLoader, setIsLoader] = useState(false);
 
@@ -69,10 +72,14 @@ function Register() {
         setPhoneInput(e.target.value);
         setErrClassPhone(false);
         break;
+      case 'dob':
+        setDobInput(e.target.value);
+        setErrClassDob(false);
+        break;
       case 'avatar':
         const file = e.target.files[0];
         setAvatarFile(file);
-        setAvatarPreview(URL.createObjectURL(file)); // Preview the selected avatar
+        setAvatarPreview(URL.createObjectURL(file));
         break;
       default:
         break;
@@ -115,6 +122,11 @@ function Register() {
       setErrClassAddress(true);
       addressRef.current.focus();
       return;
+    } else if (!dobInput) {
+      toast.error('Vui lòng nhập ngày sinh.');
+      setErrClassDob(true);
+      dobRef.current.focus();
+      return;
     } else if (!passInput) {
       toast.error('Vui lòng nhập mật khẩu.');
       SetErrClassPass(true);
@@ -133,8 +145,8 @@ function Register() {
     formData.append('password', passInput);
     formData.append('address', addressInput);
     formData.append('phone', phoneInput);
+    formData.append('date_of_birth', dobInput); // Add date of birth to form data
     formData.append('avatar', avatarFile);
-
     try {
       setIsLoader(true);
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -144,13 +156,14 @@ function Register() {
       navigate('/');
     } catch (error) {
       setIsLoader(false);
+      console.log(error);
       toast.error('Đã xảy ra lỗi trong quá trình đăng ký.');
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission behavior
+      e.preventDefault();
       handleSubmit();
     }
   };
@@ -209,7 +222,6 @@ function Register() {
                 fullWidth
               />
             </FormControl>
-
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Địa chỉ"
@@ -223,67 +235,79 @@ function Register() {
                 fullWidth
               />
             </FormControl>
+
+            <FormControl fullWidth margin="normal">
+              <TextField
+                label="Ngày sinh"
+                type="date"
+                value={dobInput}
+                inputRef={dobRef}
+                error={errClassDob}
+                onChange={(e) => handleChange(e, 'dob')}
+                required
+                id="date_of_birth"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </FormControl>
+
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Mật khẩu"
-                type="password"
                 value={passInput}
                 inputRef={passRef}
                 error={errClassPass}
                 onChange={(e) => handleChange(e, 'password')}
                 required
                 id="password"
+                type="password"
                 variant="outlined"
                 fullWidth
               />
             </FormControl>
+
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Xác nhận mật khẩu"
-                type="password"
                 value={confirmPassInput}
                 inputRef={confirmPassRef}
                 error={errClassConfirmPass}
                 onChange={(e) => handleChange(e, 'confirmPassword')}
                 required
-                id="confirmPassword"
+                id="confirm_password"
+                type="password"
                 variant="outlined"
                 fullWidth
               />
             </FormControl>
 
-            <FormControl fullWidth margin="normal">
-              <input type="file" ref={avatarRef} onChange={(e) => handleChange(e, 'avatar')} id="avatar" required />
-            </FormControl>
-
-            {avatarPreview && (
-              <div className="avatar-preview-container">
-                <img src={avatarPreview} alt="Avatar Preview" />
-                <Button variant="contained" className="remove-avatar-button" onClick={handleRemoveAvatar}>
-                  Xóa ảnh
-                </Button>
-              </div>
-            )}
+            <div className="form-group">
+              <label htmlFor="avatar">Ảnh đại diện</label>
+              <input type="file" id="avatar" ref={avatarRef} onChange={(e) => handleChange(e, 'avatar')} />
+              {avatarPreview && (
+                <div className="avatar-preview">
+                  <img src={avatarPreview} alt="Avatar Preview" />
+                  <button type="button" onClick={handleRemoveAvatar} className="remove-avatar-button">
+                    Xóa ảnh
+                  </button>
+                </div>
+              )}
+            </div>
 
             <Button
-              ref={btnSubmitRef}
               onClick={handleSubmit}
-              className="submit"
+              className="submit-register"
               variant="contained"
               color="primary"
+              ref={btnSubmitRef}
               fullWidth
             >
               Đăng ký
             </Button>
           </form>
-          <div className="notification-box">
-            <p className="notification-box__text">
-              <strong>
-                Chào mừng bạn đến với Orange. Hãy tạo tài khoản để trải nghiệm đầy đủ tính năng của chúng tôi.
-              </strong>
-            </p>
-          </div>
-          <Social isRegister={true} />
+
+          <Social />
         </section>
       </main>
     </UserLayout>

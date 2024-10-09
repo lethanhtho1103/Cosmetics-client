@@ -159,7 +159,7 @@ function ProductDetail() {
                   </Typography>
                 </Box>
                 <Box className="price-box-product">
-                  {productDetail?.promotion?.discount_value ? (
+                  {productDetail?.promotion?.discount_value && productDetail?.promotion?.status === 'active' ? (
                     <span className="special-price">
                       {formatNumber((productDetail?.price * productDetail?.promotion?.discount_value) / 100)}
                     </span>
@@ -167,7 +167,7 @@ function ProductDetail() {
                     <span className="special-price">{formatNumber(productDetail?.price)}</span>
                   )}
                   ₫
-                  {productDetail?.promotion?.discount_value && (
+                  {productDetail?.promotion?.status === 'active' && productDetail?.promotion?.discount_value && (
                     <>
                       <span className="old-price">{formatNumber(productDetail?.price)}₫</span>
                       <span className="percent-discount">

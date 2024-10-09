@@ -22,7 +22,8 @@ function Home() {
   const [promotions, setPromotions] = useState([]);
   const handleGetAllPromotions = async () => {
     const res = await promotionService.getAllPromotions();
-    setPromotions(res);
+    const promotionsFilter = res.filter((promotion) => promotion.status === 'active');
+    setPromotions(promotionsFilter);
   };
   useEffect(() => {
     handleGetAllPromotions();
@@ -57,11 +58,13 @@ function Home() {
           />
         </Box>
       </Box>
-      <Box className="home-flashSale-block">
-        <Box className="row-full-width-inner">
-          <PromotionTabs promotions={promotions} />
+      {promotions.length > 0 && (
+        <Box className="home-flashSale-block">
+          <Box className="row-full-width-inner">
+            <PromotionTabs promotions={promotions} />
+          </Box>
         </Box>
-      </Box>
+      )}
       <Box className="hot-brands">
         <Box className="row-full-width-inner">
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

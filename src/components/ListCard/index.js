@@ -32,7 +32,9 @@ function ListCard({ cardCount = 5, products }) {
           const origin = product?.product_id?.origin || product?.origin;
           const image = product?.product_id?.image || product?.image;
           const price = product?.product_id?.price || product?.price;
-          const discount = product?.promotion_id?.discount_value || product?.promotion?.discount_value;
+          const discount =
+            (product?.promotion_id?.status === 'active' && product?.promotion_id?.discount_value) ||
+            product?.promotion?.discount_value;
           const average_star = product?.product_id?.average_star || product?.average_star;
 
           return (

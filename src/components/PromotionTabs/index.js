@@ -68,10 +68,8 @@ function BasicTabs({ promotions }) {
     }
   };
 
-  // Gọi hàm lấy dữ liệu khi component mount
   React.useEffect(() => {
     if (promotions && promotions.length > 0) {
-      // Lấy promotion_id của tab đầu tiên khi vào trang
       handleGetAllProductByPromotionId(promotions[0]._id);
     }
   }, [promotions]);

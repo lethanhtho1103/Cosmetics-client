@@ -30,7 +30,7 @@ const productService = {
     try {
       const res = await axios.get('/api/product/get-by-name', {
         params: {
-          nameProduct,
+          nameProduct: nameProduct?.trim(),
         },
       });
       return res.data;

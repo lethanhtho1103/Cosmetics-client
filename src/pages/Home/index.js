@@ -15,8 +15,18 @@ import TSUBAKI from '~/assets/image/TSUBAKI.webp';
 import cocoon from '~/assets/image/cocoon.jpg';
 
 import './Home.scss';
+import promotionService from '~/services/promotionService';
+import { useEffect, useState } from 'react';
 
 function Home() {
+  const [promotions, setPromotions] = useState([]);
+  const handleGetAllPromotions = async () => {
+    const res = await promotionService.getAllPromotions();
+    setPromotions(res);
+  };
+  useEffect(() => {
+    handleGetAllPromotions();
+  }, []);
   return (
     <UserLayout>
       <Box sx={{ width: '100%', display: 'flex' }}>
@@ -49,7 +59,7 @@ function Home() {
       </Box>
       <Box className="home-flashSale-block">
         <Box className="row-full-width-inner">
-          <PromotionTabs />
+          <PromotionTabs promotions={promotions} />
         </Box>
       </Box>
       <Box className="hot-brands">

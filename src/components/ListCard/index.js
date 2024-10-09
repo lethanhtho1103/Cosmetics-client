@@ -14,10 +14,9 @@ function ListCard({ cardCount = 5, products }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // Calculate the start and end indices for slicing the products array
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProducts = products?.slice(startIndex, endIndex);
+  const currentProducts = Array.isArray(products) ? products.slice(startIndex, endIndex) : [];
 
   const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -28,49 +27,64 @@ function ListCard({ cardCount = 5, products }) {
   return (
     <Box sx={{ marginTop: '24px' }}>
       <div className={`product-items product-items-${cardCount}`}>
-        {currentProducts?.map((product, index) => (
-          <Card
-            className={`product-item ${index % cardCount === 0 ? 'first-in-row' : ''} ${
-              (index + 1) % cardCount === 0 ? 'last-in-row' : ''
-            }`}
-            sx={{ maxWidth: `calc(100%/${cardCount}  - 13px)` }}
-            key={index}
-          >
-            <CardActionArea>
-              <Link to={`http://localhost:3000/product-detail/${product?.name}`} className="product-item-link">
-                <Box sx={{ padding: '8px' }}>
-                  <CardMedia
-                    component="img"
-                    height="227"
-                    image={`${baseUrl}/${product?.image}`}
-                    alt={product?.name}
-                    sx={{ borderRadius: '4px' }}
-                  />
-                </Box>
-              </Link>
-              <CardContent sx={{ padding: '8px 12px' }}>
-                <Link to={`http://localhost:3000/product-detail/${product?.name}`} className="product-item-brand-link">
-                  {product?.origin}
+        {currentProducts?.map((product, index) => {
+          const name = product?.product_id?.name || product?.name;
+          const origin = product?.product_id?.origin || product?.origin;
+          const image = product?.product_id?.image || product?.image;
+          const price = product?.product_id?.price || product?.price;
+          const discount = product?.promotion_id?.discount_value || product?.promotion?.discount_value;
+          const average_star = product?.product_id?.average_star || product?.average_star;
+
+          return (
+            <Card
+              className={`product-item ${index % cardCount === 0 ? 'first-in-row' : ''} ${
+                (index + 1) % cardCount === 0 ? 'last-in-row' : ''
+              }`}
+              sx={{ maxWidth: `calc(100%/${cardCount}  - 13px)` }}
+              key={index}
+            >
+              <CardActionArea>
+                <Link to={`http://localhost:3000/product-detail/${name}`} className="product-item-link">
+                  <Box sx={{ padding: '8px' }}>
+                    <CardMedia
+                      component="img"
+                      height="227"
+                      image={`${baseUrl}/${image}`}
+                      alt={name}
+                      sx={{ borderRadius: '4px' }}
+                    />
+                  </Box>
                 </Link>
-                <Link to={`http://localhost:3000/product-detail/${product?.name}`} className="product-item-name-link">
-                  {product?.name}
-                </Link>
-                <Box className="product-item-rating">
-                  <Rating name="read-only" value={product?.average_star} readOnly sx={{ fontSize: '16px' }} />
-                  <span className="number-rating">{product?.average_star}</span>
-                </Box>
-                <Box className="price-box">
-                  <span className="special-price">{formatNumber(product?.price)}</span>
-                  <span className="old-price">{product?.oldPrice ? '99000' : '0'}</span>
-                  <span className="percent-discount">
-                    <span>-</span>
-                    {product?.discount ? '10' : '0'}%
-                  </span>
-                </Box>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
+                <CardContent sx={{ padding: '8px 12px' }}>
+                  <Link to={`http://localhost:3000/product-detail/${name}`} className="product-item-brand-link">
+                    {origin}
+                  </Link>
+                  <Link to={`http://localhost:3000/product-detail/${name}`} className="product-item-name-link">
+                    {name}
+                  </Link>
+                  <Box className="product-item-rating">
+                    <Rating name="read-only" value={average_star} readOnly sx={{ fontSize: '16px' }} />
+                    <span className="number-rating">{average_star}</span>
+                  </Box>
+                  <Box className="price-box">
+                    {discount > 0 ? (
+                      <span className="special-price">{formatNumber((price * discount) / 100)}</span>
+                    ) : (
+                      <span className="special-price">{formatNumber(price)}</span>
+                    )}
+                    {discount > 0 && <span className="old-price">{formatNumber(price)}</span>}
+                    {discount > 0 && (
+                      <span className="percent-discount">
+                        <span>-</span>
+                        {discount ? discount : '0'}%
+                      </span>
+                    )}
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          );
+        })}
       </div>
       <Pagination
         count={Math.ceil(products?.length / itemsPerPage)}
@@ -83,10 +97,10 @@ function ListCard({ cardCount = 5, products }) {
           justifyContent: 'center',
           '& .MuiPaginationItem-root': {
             backgroundColor: '#f5f5f5',
-            fontWeight: 600, // Ensures good contrast
+            fontWeight: 600,
           },
           '& .Mui-selected': {
-            color: 'white !important', // Active page color
+            color: 'white !important',
             backgroundColor: 'primary.main',
           },
         }}

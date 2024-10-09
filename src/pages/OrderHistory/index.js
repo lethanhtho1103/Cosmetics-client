@@ -35,8 +35,10 @@ function OrderHistory() {
   };
 
   const handleGetAllOrder = async () => {
-    const res = await orderService.getOrderById(userId);
-    setOrders(res?.data);
+    if (userId) {
+      const res = await orderService.getOrderById(userId);
+      setOrders(res?.data);
+    }
   };
   // const [openReviewDialog, setOpenReviewDialog] = useState(false);
   // const [currentOrderDetails, setCurrentOrderDetails] = useState(null);

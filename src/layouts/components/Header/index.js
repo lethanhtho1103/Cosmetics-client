@@ -199,17 +199,17 @@ function Header() {
       <div className="nav-sections">
         <div className="magemenu-menu">
           <ul className="megamenu-items">
-            {shops.map((shop) => (
+            {shops?.map((shop) => (
               <li key={shop.id} className="megamenu-item">
                 <div className="submenu-content">
                   <div className="block-list">
-                    {shop.Cosmetics.map((cosmetic) => (
+                    {shop.Cosmetics?.map((cosmetic) => (
                       <div key={cosmetic.id} className="block-item">
                         <div className="category-link">
                           <Link to="#">{cosmetic.name}</Link>
                         </div>
                         <ul className="megamenu-sub-items">
-                          {cosmetic.categories.map((category) => (
+                          {cosmetic.categories?.map((category) => (
                             <li key={category.id} className="megamenu-sub-item">
                               <Link to={`/categories/${category.name}`}>{category.name}</Link>
                             </li>

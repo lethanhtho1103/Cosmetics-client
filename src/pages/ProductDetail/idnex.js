@@ -71,7 +71,7 @@ function ProductDetail() {
 
   const handleGetProductByName = async () => {
     try {
-      const res = await productService.getProductByName({ nameProduct });
+      const res = await productService.getProductByName({ nameProduct: nameProduct.trim() });
       setProductDetail(res.data);
     } catch (error) {
       console.error('Failed to fetch product details', error);
@@ -89,13 +89,16 @@ function ProductDetail() {
 
   const handleGetAllOrder = async () => {
     const userId = currentUser?._id;
-    const res = await orderService.getOrderById(userId);
-    if (
-      res?.data?.some((order) => order?.orderDetails?.some((orderDetail) => orderDetail.product_name === nameProduct))
-    ) {
-      setIsShowWriteComment(true);
+    if (userId) {
+      const res = await orderService.getOrderById(userId);
+      if (
+        res?.data?.some((order) => order?.orderDetails?.some((orderDetail) => orderDetail.product_name === nameProduct))
+      ) {
+        setIsShowWriteComment(true);
+      }
     }
   };
+  const formatNumber = (num) => num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   useEffect(() => {
     const fetchProductAndOrder = async () => {
@@ -156,11 +159,23 @@ function ProductDetail() {
                   </Typography>
                 </Box>
                 <Box className="price-box-product">
-                  <span className="special-price">{productDetail?.price?.toLocaleString()}</span>₫
-                  <span className="old-price">199,000₫</span>
-                  <span className="percent-discount">
-                    <span>-</span>30%
-                  </span>
+                  {productDetail?.promotion?.discount_value ? (
+                    <span className="special-price">
+                      {formatNumber((productDetail?.price * productDetail?.promotion?.discount_value) / 100)}
+                    </span>
+                  ) : (
+                    <span className="special-price">{formatNumber(productDetail?.price)}</span>
+                  )}
+                  ₫
+                  {productDetail?.promotion?.discount_value && (
+                    <>
+                      <span className="old-price">{formatNumber(productDetail?.price)}₫</span>
+                      <span className="percent-discount">
+                        <span>-</span>
+                        {productDetail?.promotion?.discount_value}%
+                      </span>
+                    </>
+                  )}
                 </Box>
                 <Typography variant="body1" paragraph className="product-description">
                   {productDetail?.description}

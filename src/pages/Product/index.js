@@ -86,7 +86,6 @@ function Product() {
       trademark: selectedBrands,
     });
     setProducts(res.data);
-    // Extract unique trademarks from products and update brands
     if (!brandsSet.current) {
       const uniqueBrands = [...new Set(res.data.map((product) => product.trademark))];
       setBrands(uniqueBrands);

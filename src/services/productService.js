@@ -38,6 +38,15 @@ const productService = {
       console.error(error);
     }
   },
+
+  async getTopSellingProduct() {
+    try {
+      const res = await axios.get('/api/product/get-top-sell');
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 
 export default productService;

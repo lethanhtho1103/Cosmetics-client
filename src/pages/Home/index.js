@@ -17,16 +17,29 @@ import cocoon from '~/assets/image/cocoon.jpg';
 import './Home.scss';
 import promotionService from '~/services/promotionService';
 import { useEffect, useState } from 'react';
+import productService from '~/services/productService';
 
 function Home() {
   const [promotions, setPromotions] = useState([]);
-  const handleGetAllPromotions = async () => {
-    const res = await promotionService.getAllPromotions();
-    const promotionsFilter = res.filter((promotion) => promotion.status === 'active');
-    setPromotions(promotionsFilter);
-  };
+  const [topSellProducts, setTopSellProducts] = useState([]);
+
   useEffect(() => {
-    handleGetAllPromotions();
+    const fetchData = async () => {
+      try {
+        const [promotionsRes, topSellingRes] = await Promise.all([
+          promotionService.getAllPromotions(),
+          productService.getTopSellingProduct(),
+        ]);
+
+        const promotionsFilter = promotionsRes.filter((promotion) => promotion.status === 'active');
+        setPromotions(promotionsFilter);
+        setTopSellProducts(topSellingRes.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
   return (
     <UserLayout>
@@ -109,12 +122,12 @@ function Home() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 className="">Sản phẩm bán chạy</h3>
             <Box className="show-all">
-              <Link href="#">
+              {/* <Link href="#">
                 Xem tất cả <KeyboardArrowRight />
-              </Link>
+              </Link> */}
             </Box>
           </Box>
-          <ListCard />
+          <ListCard products={topSellProducts} />
         </Box>
       </Box>
     </UserLayout>

@@ -12,7 +12,7 @@ import { baseUrl } from '~/axios';
 
 function ListCard({ cardCount = 5, products }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = cardCount === 5 ? 10 : 8;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;

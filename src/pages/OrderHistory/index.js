@@ -173,7 +173,7 @@ function OrderHistory() {
                       <Typography variant="body2" sx={{ color: 'red', fontWeight: 500, textTransform: 'uppercase' }}>
                         {order?.status === 'pending'
                           ? 'Chờ xác nhận'
-                          : order?.status === 'accepted'
+                          : order?.status === 'shipped'
                           ? 'Chờ giao hàng'
                           : order?.status === 'delivered'
                           ? 'Hoàn thành'

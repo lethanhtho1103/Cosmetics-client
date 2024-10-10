@@ -131,63 +131,69 @@ function Cart() {
                   />
                 </Box>
                 <Box className="cart-items">
-                  {cartItems?.map((item, index) => (
-                    <Box key={item?.product_id?._id} className="cart-item">
-                      <Box className="cart-item-details">
-                        <Link to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}>
-                          <img
-                            src={`${baseUrl}/${item?.product_id?.image}`}
-                            alt={item?.product_id?.name}
-                            className="cart-item-image"
-                          />
-                        </Link>
-                        <Box className="cart-item-info">
-                          <Link
-                            className="cart-item-info-name"
-                            to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}
-                          >
-                            {item?.product_id?.name}
+                  {cartItems?.map((item, index) => {
+                    const price =
+                      item?.product_id?.promotion?.discount_value > 0 && item?.product_id?.promotion.status === 'active'
+                        ? (item?.product_id?.promotion?.discount_value * item?.product_id?.price) / 100
+                        : item?.product_id?.price;
+                    return (
+                      <Box key={item?.product_id?._id} className="cart-item">
+                        <Box className="cart-item-details">
+                          <Link to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}>
+                            <img
+                              src={`${baseUrl}/${item?.product_id?.image}`}
+                              alt={item?.product_id?.name}
+                              className="cart-item-image"
+                            />
                           </Link>
-                          <Typography className="cart-item-info-price">
-                            Đơn giá: <span>{item?.product_id?.price?.toLocaleString()}₫</span>
+                          <Box className="cart-item-info">
+                            <Link
+                              className="cart-item-info-name"
+                              to={`http://localhost:3000/product-detail/${item?.product_id?.name}`}
+                            >
+                              {item?.product_id?.name}
+                            </Link>
+                            <Typography className="cart-item-info-price">
+                              Đơn giá: <span>{price.toLocaleString()}₫</span>
+                            </Typography>
+                            <Box className="quantity-controls">
+                              <button
+                                onClick={() => handleQuantityChange(item?.product_id?._id, index, -1)}
+                                disabled={loading}
+                              >
+                                -
+                              </button>
+                              <span>{item?.quantity}</span>
+                              <button
+                                onClick={() => handleQuantityChange(item?.product_id?._id, index, 1)}
+                                disabled={loading}
+                              >
+                                +
+                              </button>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box className="cart-item-actions">
+                          <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                            Tạm tính:
+                            <Typography sx={{ color: '#f44336', ml: '4px', fontWeight: 700 }}>
+                              {price?.toLocaleString()}₫
+                            </Typography>
                           </Typography>
-                          <Box className="quantity-controls">
-                            <button
-                              onClick={() => handleQuantityChange(item?.product_id?._id, index, -1)}
-                              disabled={loading}
-                            >
-                              -
-                            </button>
-                            <span>{item?.quantity}</span>
-                            <button
-                              onClick={() => handleQuantityChange(item?.product_id?._id, index, 1)}
-                              disabled={loading}
-                            >
-                              +
-                            </button>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <FormControlLabel
+                              control={<Checkbox checked={item?.selected} onChange={() => handleSelectItem(index)} />}
+                              label=""
+                              sx={{ marginRight: 0 }}
+                            />
+                            <Box className="remove-item" onClick={() => handleDeleteCart(item?.product_id?._id)}>
+                              Xóa
+                            </Box>
                           </Box>
                         </Box>
                       </Box>
-                      <Box className="cart-item-actions">
-                        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                          Tạm tính:
-                          <Typography sx={{ color: '#f44336', ml: '4px', fontWeight: 700 }}>
-                            {(item?.product_id?.price * item?.quantity)?.toLocaleString()}₫
-                          </Typography>
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <FormControlLabel
-                            control={<Checkbox checked={item?.selected} onChange={() => handleSelectItem(index)} />}
-                            label=""
-                            sx={{ marginRight: 0 }}
-                          />
-                          <Box className="remove-item" onClick={() => handleDeleteCart(item?.product_id?._id)}>
-                            Xóa
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  ))}
+                    );
+                  })}
                 </Box>
               </Grid>
               <Grid item className="check-out">
@@ -201,7 +207,7 @@ function Cart() {
                       mt: 2,
                     }}
                   >
-                    Tổng sản phẩm đã chọn:{' '}
+                    Tổng sản phẩm đã chọn:
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
                       {cartItems?.filter((item) => item?.selected).length}
                     </Typography>
@@ -211,22 +217,43 @@ function Cart() {
                     <Typography sx={{ fontWeight: 700, color: '#000' }}>
                       {cartItems
                         ?.filter((item) => item?.selected)
-                        ?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
+                        ?.reduce((sum, item) => {
+                          const product = item?.product_id;
+                          let price = product?.price;
+                          if (
+                            product?.promotion &&
+                            product?.promotion.status === 'active' &&
+                            product.promotion.discount_value > 0
+                          ) {
+                            price = price - (price * product.promotion.discount_value) / 100;
+                          }
+                          return sum + price * item?.quantity;
+                        }, 0)
                         .toLocaleString()}
-                      đ
+                      ₫
                     </Typography>
-                  </Typography>
-                  <Typography className="order-text">
-                    Mã giảm giá: <Typography sx={{ fontWeight: 700, color: '#000' }}>0đ</Typography>
                   </Typography>
                   <Typography className="order-text">
                     Tổng thanh toán:
                     <Typography className="total-price">
                       {cartItems
                         ?.filter((item) => item?.selected)
-                        ?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0)
+                        ?.reduce((sum, item) => {
+                          const product = item?.product_id;
+                          let price = product?.price;
+
+                          if (
+                            product?.promotion &&
+                            product?.promotion.status === 'active' &&
+                            product.promotion.discount_value > 0
+                          ) {
+                            price = price - (price * product.promotion.discount_value) / 100;
+                          }
+
+                          return sum + price * item?.quantity;
+                        }, 0)
                         .toLocaleString()}
-                      đ
+                      ₫
                     </Typography>
                   </Typography>
                   <button

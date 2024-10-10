@@ -20,7 +20,14 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
   const userId = currentUser?._id;
 
   const selectedItems = cartItems?.filter((item) => item.selected);
-  const totalPrice = selectedItems?.reduce((sum, item) => sum + item?.product_id?.price * item?.quantity, 0);
+  const totalPrice = selectedItems?.reduce((sum, item) => {
+    const product = item?.product_id;
+    let price = product?.price;
+    if (product?.promotion && product?.promotion.status === 'active' && product.promotion.discount_value > 0) {
+      price = price - (price * product.promotion.discount_value) / 100;
+    }
+    return sum + price * item?.quantity;
+  }, 0);
 
   const handleCheckout = async (isPayment) => {
     try {
@@ -48,22 +55,31 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
                 Sản phẩm đã chọn
               </Typography>
-              {selectedItems?.map((item) => (
-                <Box key={item?.product_id?._id} sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
-                  <img
-                    src={`${baseUrl}/${item?.product_id?.image}`}
-                    alt={item?.product_id?.name}
-                    style={{ width: '80px', height: '80px', marginRight: '16px' }}
-                  />
-                  <Box>
-                    <Typography sx={{ fontWeight: 600 }}>{item?.product_id?.name}</Typography>
-                    <Typography sx={{ color: '#545453' }}>Số lượng: {item.quantity}</Typography>
-                    <Typography sx={{ color: '#545453' }}>
-                      Đơn giá: {item?.product_id?.price.toLocaleString()}₫
-                    </Typography>
+              {selectedItems?.map((item) => {
+                const product = item?.product_id;
+                let price = product?.price;
+                if (
+                  product?.promotion &&
+                  product?.promotion.status === 'active' &&
+                  product.promotion.discount_value > 0
+                ) {
+                  price = price - (price * product.promotion.discount_value) / 100;
+                }
+                return (
+                  <Box key={product?._id} sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
+                    <img
+                      src={`${baseUrl}/${product?.image}`}
+                      alt={product?.name}
+                      style={{ width: '80px', height: '80px', marginRight: '16px' }}
+                    />
+                    <Box>
+                      <Typography sx={{ fontWeight: 600 }}>{product?.name}</Typography>
+                      <Typography sx={{ color: '#545453' }}>Số lượng: {item.quantity}</Typography>
+                      <Typography sx={{ color: '#545453' }}>Đơn giá: {price.toLocaleString()}₫</Typography>
+                    </Box>
                   </Box>
-                </Box>
-              ))}
+                );
+              })}
 
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
                 <Typography sx={{ fontWeight: 500, fontSize: '16px' }}>Tổng thanh toán:</Typography>

@@ -46,6 +46,20 @@
     width: calc(100% - 240px);
     padding-left: 32px;
   }
+  .empty-products-message {
+    border-radius: 5px;
+    text-align: center;
+    margin: 0 0 5px;
+    padding: 7px 15px;
+    display: block;
+    font-weight: 600;
+    line-height: 1.429;
+    font-size: 14px;
+    border: 1px solid;
+    background: #fdf0d5;
+    color: #6f4400;
+    position: relative;
+  }
 }
 
 .custom-accordion::before {

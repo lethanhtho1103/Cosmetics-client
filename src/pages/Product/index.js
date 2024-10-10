@@ -119,143 +119,153 @@ function Product() {
                 <Typography variant="h1">Hỗ trợ làm đẹp da</Typography>
                 <Typography variant="body2">({products?.length} sản phẩm)</Typography>
               </Box>
-              <Box className="toolbar-store">
-                <Typography component="label">Xếp theo: </Typography>
-                <FormControl sx={{ minWidth: 120 }} size="small">
-                  <Select value={sortBy} onChange={handleSortChange} displayEmpty>
-                    <MenuItem value="sold_quantity">Bán chạy nhất</MenuItem>
-                    <MenuItem value="average_star">Xếp hạng</MenuItem>
-                    <MenuItem value="AZname">Tên sản phẩm (A - Z)</MenuItem>
-                    <MenuItem value="ZAname">Tên sản phẩm (Z - A)</MenuItem>
-                    <MenuItem value="ZAprice">Giá giảm dần</MenuItem>
-                    <MenuItem value="AZprice">Giá tăng dần</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box>
-            <Box sx={{ display: 'flex' }}>
-              <Box className="sidebar-main">
-                {/* Filter Display */}
-                <Box sx={{ marginBottom: 1, padding: '8px 16px', border: '1px solid #ccc', borderRadius: 1 }}>
-                  <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: '700' }}>
-                    LỌC THEO
-                  </Typography>
-                  <Box>
-                    {(priceRange[0] !== 0 || priceRange[1] !== 3000000) && (
-                      <FilterItem
-                        label={`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}`}
-                        onRemove={() =>
-                          handleRemoveFilter(`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}₫`)
-                        }
-                      />
-                    )}
-                    {selectedDiscounts.map((discount) => (
-                      <FilterItem key={discount} label={discount} onRemove={() => handleRemoveFilter(discount)} />
-                    ))}
-                    {selectedBrands.map((brand) => (
-                      <FilterItem key={brand} label={brand} onRemove={() => handleRemoveFilter(brand)} />
-                    ))}
-                  </Box>
+              {products?.length > 0 && (
+                <Box className="toolbar-store">
+                  <Typography component="label">Xếp theo: </Typography>
+                  <FormControl sx={{ minWidth: 120 }} size="small">
+                    <Select value={sortBy} onChange={handleSortChange} displayEmpty>
+                      <MenuItem value="sold_quantity">Bán chạy nhất</MenuItem>
+                      <MenuItem value="average_star">Xếp hạng</MenuItem>
+                      <MenuItem value="AZname">Tên sản phẩm (A - Z)</MenuItem>
+                      <MenuItem value="ZAname">Tên sản phẩm (Z - A)</MenuItem>
+                      <MenuItem value="ZAprice">Giá giảm dần</MenuItem>
+                      <MenuItem value="AZprice">Giá tăng dần</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
-
-                {/* Price Range Accordion */}
-                <Accordion
-                  className="custom-accordion"
-                  sx={{ borderTopRightRadius: '4px', borderTopLeftRadius: '4px' }}
-                >
-                  <AccordionSummary
-                    sx={{ fontWeight: '700', textTransform: 'uppercase', borderTop: 'none' }}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                  >
-                    Khoảng giá
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography>{`${formatNumber(priceRange[0])}₫`}</Typography>
-                      <Typography>{`${formatNumber(priceRange[1])}₫`}</Typography>
-                    </Box>
-                    <Slider
-                      value={priceRange}
-                      onChange={handlePriceChange}
-                      min={0}
-                      max={3000000}
-                      step={1000}
-                      valueLabelDisplay="auto"
-                      sx={{
-                        color: 'orange',
-                        '& .MuiSlider-thumb': { borderRadius: '50%' },
-                      }}
-                    />
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                      <PriceInput value={formatNumber(priceRange[0])} onChange={(e) => handlePriceInputChange(0, e)} />
-                      <Typography component="span" sx={{ mx: 1 }}>
-                        -
-                      </Typography>
-                      <PriceInput value={formatNumber(priceRange[1])} onChange={(e) => handlePriceInputChange(1, e)} />
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-
-                {/* Discount Accordion */}
-                <Accordion className="custom-accordion">
-                  <AccordionSummary
-                    sx={{ fontWeight: '700', textTransform: 'uppercase' }}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
-                  >
-                    Khuyến mãi
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {discounts.map((discount) => (
-                      <FormControlLabel
-                        key={discount}
-                        control={
-                          <Checkbox
-                            checked={selectedDiscounts.includes(discount)}
-                            onChange={handleCheckboxChange(setSelectedDiscounts, discount)}
-                            sx={{ color: 'orange', '&.Mui-checked': { color: 'orange' } }}
-                          />
-                        }
-                        label={discount}
-                      />
-                    ))}
-                  </AccordionDetails>
-                </Accordion>
-
-                {/* Brands Accordion */}
-                <Accordion className="custom-accordion">
-                  <AccordionSummary
-                    sx={{ fontWeight: '700', textTransform: 'uppercase' }}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel3-content"
-                    id="panel3-header"
-                  >
-                    Thương hiệu
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {brands.map((brand) => (
-                      <FormControlLabel
-                        key={brand}
-                        control={
-                          <Checkbox
-                            checked={selectedBrands.includes(brand)}
-                            onChange={handleCheckboxChange(setSelectedBrands, brand)}
-                            sx={{ color: 'orange', '&.Mui-checked': { color: 'orange' } }}
-                          />
-                        }
-                        label={brand}
-                      />
-                    ))}
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-              <Box className="column-main" sx={{ mt: '-24px' }}>
-                <ListCard cardCount={4} products={products} />
-              </Box>
+              )}
             </Box>
+            {products?.length > 0 ? (
+              <Box sx={{ display: 'flex' }}>
+                <Box className="sidebar-main">
+                  <Box sx={{ marginBottom: 1, padding: '8px 16px', border: '1px solid #ccc', borderRadius: 1 }}>
+                    <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: '700' }}>
+                      LỌC THEO
+                    </Typography>
+                    <Box>
+                      {(priceRange[0] !== 0 || priceRange[1] !== 3000000) && (
+                        <FilterItem
+                          label={`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}`}
+                          onRemove={() =>
+                            handleRemoveFilter(`${formatNumber(priceRange[0])} - ${formatNumber(priceRange[1])}₫`)
+                          }
+                        />
+                      )}
+                      {selectedDiscounts.map((discount) => (
+                        <FilterItem key={discount} label={discount} onRemove={() => handleRemoveFilter(discount)} />
+                      ))}
+                      {selectedBrands.map((brand) => (
+                        <FilterItem key={brand} label={brand} onRemove={() => handleRemoveFilter(brand)} />
+                      ))}
+                    </Box>
+                  </Box>
+
+                  <Accordion
+                    className="custom-accordion"
+                    sx={{ borderTopRightRadius: '4px', borderTopLeftRadius: '4px' }}
+                  >
+                    <AccordionSummary
+                      sx={{ fontWeight: '700', textTransform: 'uppercase', borderTop: 'none' }}
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                    >
+                      Khoảng giá
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography>{`${formatNumber(priceRange[0])}₫`}</Typography>
+                        <Typography>{`${formatNumber(priceRange[1])}₫`}</Typography>
+                      </Box>
+                      <Slider
+                        value={priceRange}
+                        onChange={handlePriceChange}
+                        min={0}
+                        max={3000000}
+                        step={1000}
+                        valueLabelDisplay="auto"
+                        sx={{
+                          color: 'orange',
+                          '& .MuiSlider-thumb': { borderRadius: '50%' },
+                        }}
+                      />
+                      <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                        <PriceInput
+                          value={formatNumber(priceRange[0])}
+                          onChange={(e) => handlePriceInputChange(0, e)}
+                        />
+                        <Typography component="span" sx={{ mx: 1 }}>
+                          -
+                        </Typography>
+                        <PriceInput
+                          value={formatNumber(priceRange[1])}
+                          onChange={(e) => handlePriceInputChange(1, e)}
+                        />
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+
+                  <Accordion className="custom-accordion">
+                    <AccordionSummary
+                      sx={{ fontWeight: '700', textTransform: 'uppercase' }}
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel2-content"
+                      id="panel2-header"
+                    >
+                      Khuyến mãi
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {discounts.map((discount) => (
+                        <FormControlLabel
+                          key={discount}
+                          control={
+                            <Checkbox
+                              checked={selectedDiscounts.includes(discount)}
+                              onChange={handleCheckboxChange(setSelectedDiscounts, discount)}
+                              sx={{ color: 'orange', '&.Mui-checked': { color: 'orange' } }}
+                            />
+                          }
+                          label={discount}
+                        />
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
+
+                  <Accordion className="custom-accordion">
+                    <AccordionSummary
+                      sx={{ fontWeight: '700', textTransform: 'uppercase' }}
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel3-content"
+                      id="panel3-header"
+                    >
+                      Thương hiệu
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {brands.map((brand) => (
+                        <FormControlLabel
+                          key={brand}
+                          control={
+                            <Checkbox
+                              checked={selectedBrands.includes(brand)}
+                              onChange={handleCheckboxChange(setSelectedBrands, brand)}
+                              sx={{ color: 'orange', '&.Mui-checked': { color: 'orange' } }}
+                            />
+                          }
+                          label={brand}
+                        />
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+                <Box className="column-main" sx={{ mt: '-24px' }}>
+                  <ListCard cardCount={4} products={products} />
+                </Box>
+              </Box>
+            ) : (
+              <Box className="empty-products-message">
+                Chúng tôi không thể tìm thấy sản phẩm phù hợp với việc lựa chọn.
+              </Box>
+            )}
           </Box>
         </main>
       </Container>

@@ -15,9 +15,9 @@ function AccountInfo() {
           </strong>
           <div>Email: {currentUser?.email}</div>
         </Box>
-        <Box className="box-action">
+        {/* <Box className="box-action">
           <Link to="/">Chỉnh sửa</Link>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

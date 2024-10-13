@@ -65,9 +65,9 @@ function ProductDetail() {
     [currentUser, navigate, quantity],
   );
 
-  const handleBuyNow = useCallback(() => {
-    console.log(`Purchased ${quantity} items immediately.`);
-  }, [quantity]);
+  // const handleBuyNow = useCallback(() => {
+  //   console.log(`Purchased ${quantity} items immediately.`);
+  // }, [quantity]);
 
   const handleGetProductByName = async () => {
     try {
@@ -198,9 +198,9 @@ function ProductDetail() {
                     <ShoppingCartIcon fontSize="small" className="cart-icon" />
                     Thêm vào giỏ hàng
                   </Button>
-                  <Button variant="contained" className="buy-btn" onClick={handleBuyNow}>
+                  {/* <Button variant="contained" className="buy-btn" onClick={handleBuyNow}>
                     Mua ngay
-                  </Button>
+                  </Button> */}
                 </Box>
               </Grid>
             </Grid>

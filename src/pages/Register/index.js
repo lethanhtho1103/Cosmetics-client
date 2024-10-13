@@ -154,6 +154,7 @@ function Register() {
       dispatch(loginSuccess(res));
       setIsLoader(false);
       navigate('/');
+      toast.success('Đăng ký thành công.');
     } catch (error) {
       setIsLoader(false);
       console.log(error);

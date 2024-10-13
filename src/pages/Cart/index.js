@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import CustomBreadcrumbs from '~/components/Breakcrumbs';
 import './Cart.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import cartEmptyIcon from '~/assets/image/cart-empty.svg';
@@ -30,8 +30,16 @@ function Cart() {
 
   const hasSelectedItems = cartItems?.some((item) => item?.selected);
   const loadingTimeoutRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleOpenDialog = () => setOpenDialog(true);
+  const handleOpenDialog = () => {
+    if (!currentUser?.ward || !currentUser?.district || !currentUser?.province) {
+      navigate('/account/address');
+      toast.info('Vui lòng cập nhật địa chỉ giao hàng.');
+    } else {
+      setOpenDialog(true);
+    }
+  };
   const handleCloseDialog = () => setOpenDialog(false);
 
   const debouncedUpdateCart = debounce(async (userId, productId, newQuantity) => {

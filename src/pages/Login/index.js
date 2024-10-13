@@ -13,6 +13,7 @@ import './Login.scss';
 import authService from '~/services/authService';
 import { loginSuccess } from '~/redux/authSlice';
 import Social from '~/components/Social';
+import { toast } from 'react-toastify';
 
 function LoginUser() {
   const btnSubmitRef = useRef();
@@ -69,6 +70,7 @@ function LoginUser() {
       dispatch(loginSuccess(res));
       setIsLoader(false);
       navigate('/');
+      toast.success('Đăng nhập thành công.');
     } catch (error) {
       setIsLoader(false);
       if (error.response) {

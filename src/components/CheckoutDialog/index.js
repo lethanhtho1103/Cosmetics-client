@@ -95,7 +95,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                   {currentUser?.username} {currentUser?.phone && <>&nbsp;•&nbsp; {currentUser?.phone}</>}
                 </strong>
                 <Typography sx={{ color: '#545453', fontWeight: 400 }}>
-                  {currentUser?.address ? (
+                  {currentUser?.ward ? (
                     <div>{`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}</div>
                   ) : (
                     <div>Bạn chưa có địa chỉ giao hàng.</div>

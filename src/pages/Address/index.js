@@ -140,7 +140,7 @@ function Address() {
           <strong>
             {currentUser?.username} {currentUser?.phone && <>&nbsp;•&nbsp; {currentUser?.phone}</>}
           </strong>
-          {currentUser?.address ? (
+          {currentUser?.ward ? (
             <div>{`${currentUser?.address}, ${currentUser?.ward}, ${currentUser?.district}, ${currentUser?.province}`}</div>
           ) : (
             <div>Bạn chưa có địa chỉ giao hàng.</div>

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -17,6 +18,8 @@ import { toast } from 'react-toastify';
 import orderService from '~/services/orderService';
 
 function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, currentUser }) {
+  const [paymentMethod, setPaymentMethod] = useState('cash-on-paypal');
+
   const userId = currentUser?._id;
 
   const selectedItems = cartItems?.filter((item) => item.selected);
@@ -105,7 +108,6 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
             </Paper>
           </Grid>
 
-          {/* Right Side: Shipping Address, Payment, and Shipping Method */}
           <Grid item xs={12} md={5}>
             <Paper sx={{ padding: 2, backgroundColor: '#e0f7fa', height: '100%' }}>
               <FormControl component="fieldset">
@@ -124,13 +126,52 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                   </Typography>
                 </Box>
               </FormControl>
+
               <Typography
                 variant="h6"
                 sx={{ mb: 1, mt: 3, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}
               >
-                Thanh toán bằng Paypal
+                Phương thức thanh toán
               </Typography>
-              <PayPal cost={totalPrice} handleCheckout={handleCheckout} />
+
+              <FormControl component="fieldset">
+                <Box sx={{ mb: 1 }}>
+                  <FormControlLabel
+                    checked={paymentMethod === 'cash-on-delivery'}
+                    onChange={() => setPaymentMethod('cash-on-delivery')}
+                    control={<Radio sx={{ ml: 2 }} />}
+                    label="Thanh toán khi nhận hàng"
+                    sx={{ color: '#555' }}
+                  />
+                  <FormControlLabel
+                    value="cash-on-paypal"
+                    control={<Radio sx={{ ml: 2 }} />}
+                    label="Thanh toán bằng PayPal"
+                    checked={paymentMethod === 'cash-on-paypal'}
+                    onChange={() => setPaymentMethod('cash-on-paypal')}
+                    sx={{ color: '#555' }}
+                  />
+                </Box>
+              </FormControl>
+
+              {paymentMethod === 'cash-on-paypal' ? (
+                <PayPal cost={totalPrice} handleCheckout={handleCheckout} />
+              ) : (
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#f6831f',
+                    color: '#fff',
+                    width: '100%',
+                    padding: '8px 0',
+                    borderRadius: '8px',
+                    '&:hover': { backgroundColor: '#d96b15' },
+                  }}
+                  onClick={() => handleCheckout('no')}
+                >
+                  ĐẶT HÀNG
+                </Button>
+              )}
             </Paper>
           </Grid>
         </Grid>

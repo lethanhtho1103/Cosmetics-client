@@ -169,7 +169,7 @@ function Header() {
                       Đăng Xuất
                     </MenuItem>
                   </Menu>
-                  <div className="logged-in">Xin chào, {currentUser?.username}</div>
+                  <div className="logged-in">{currentUser?.username}</div>
                 </>
               ) : (
                 <>

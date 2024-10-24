@@ -3,9 +3,9 @@ import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import './UserLayout.scss';
 import Header from '~/layouts/components/Header';
 import Footer from '../components/Footer';
+import './UserLayout.scss';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useEffect, useState } from 'react';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -38,19 +38,19 @@ function UserLayout({ children }) {
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <Header />
-      <Box className="content">
+      <Box className="content" sx={{ pt: '142px' }}>
         {children}
-        <Tooltip title="Phone">
+        {/* <Tooltip title="Phone">
           <Fab
             color="primary"
             aria-label="phone"
             size="small"
             onClick={handlePhoneClick}
-            sx={{ position: 'fixed', bottom: '72px', right: '16px' }}
+            sx={{ position: 'fixed', bottom: '138px', right: '28px' }}
           >
             <PhoneIcon sx={{ color: '#fff' }} />
           </Fab>
-        </Tooltip>
+        </Tooltip> */}
         {showPhoneNumber && (
           <Typography
             variant="h6"
@@ -70,7 +70,7 @@ function UserLayout({ children }) {
           </Typography>
         )}
         {showButton && (
-          <Fab size="small" onClick={scrollToTop} sx={{ position: 'fixed', bottom: 16, right: 16, background: '#fff' }}>
+          <Fab size="small" onClick={scrollToTop} sx={{ position: 'fixed', bottom: 90, right: 24, background: '#fff' }}>
             <ArrowUpwardIcon color="primary" />
           </Fab>
         )}

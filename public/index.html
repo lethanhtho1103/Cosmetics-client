@@ -25,7 +25,14 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <iframe
+        src="https://www.chatbase.co/chatbot-iframe/nkJ1U4BJL2DJtq0GxZKVm"
+        width="100%"
+        style="height: 100%; min-height: 700px"
+        frameborder="0"
+      ></iframe>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -36,5 +43,17 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      window.embeddedChatbotConfig = {
+        chatbotId: 'nkJ1U4BJL2DJtq0GxZKVm',
+        domain: 'www.chatbase.co',
+      };
+    </script>
+    <script
+      src="https://www.chatbase.co/embed.min.js"
+      chatbotId="nkJ1U4BJL2DJtq0GxZKVm"
+      domain="www.chatbase.co"
+      defer
+    ></script>
   </body>
 </html>

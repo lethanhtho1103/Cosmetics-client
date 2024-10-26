@@ -19,22 +19,25 @@ import orderService from '~/services/orderService';
 
 function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, currentUser }) {
   const [paymentMethod, setPaymentMethod] = useState('cash-on-paypal');
-
+  const [shippingMethod, setShippingMethod] = useState('standard');
   const userId = currentUser?._id;
 
   const selectedItems = cartItems?.filter((item) => item.selected);
-  const totalPrice = selectedItems?.reduce((sum, item) => {
+  const totalProductPrice = selectedItems?.reduce((sum, item) => {
     const product = item?.product_id;
     let price = product?.price;
     if (product?.promotion && product?.promotion.status === 'active' && product.promotion.discount_value > 0) {
-      price = price - (price * product.promotion.discount_value) / 100;
+      price -= (price * product.promotion.discount_value) / 100;
     }
     return sum + price * item?.quantity;
   }, 0);
 
+  const shippingCost = shippingMethod === 'standard' ? 25000 : 33000;
+  const totalPrice = totalProductPrice + shippingCost;
+
   const handleCheckout = async (isPayment) => {
     try {
-      const response = await orderService.checkout(userId, selectedItems, isPayment);
+      const response = await orderService.checkout(userId, selectedItems, isPayment, shippingMethod, shippingCost);
       onClose();
       handleGetCart();
       toast.success(response.message);
@@ -66,7 +69,7 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                   product?.promotion.status === 'active' &&
                   product.promotion.discount_value > 0
                 ) {
-                  price = price - (price * product.promotion.discount_value) / 100;
+                  price -= (price * product.promotion.discount_value) / 100;
                 }
                 return (
                   <Box key={product?._id} sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
@@ -84,12 +87,6 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                 );
               })}
 
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
-                <Typography sx={{ fontWeight: 500, fontSize: '16px' }}>Tổng thanh toán:</Typography>
-                <Typography variant="h6" sx={{ color: '#f44336', fontWeight: 700 }}>
-                  {totalPrice?.toLocaleString()}₫
-                </Typography>
-              </Box>
               <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 700, textTransform: 'uppercase' }}>
                 Thông tin giao hàng
               </Typography>
@@ -105,6 +102,14 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                   )}
                 </Typography>
               </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 2 }}>
+                <Typography sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
+                  Tổng thanh toán:
+                </Typography>
+                <Typography variant="h6" sx={{ color: '#f44336', fontWeight: 700 }}>
+                  {totalPrice.toLocaleString()}₫
+                </Typography>
+              </Box>
             </Paper>
           </Grid>
 
@@ -114,16 +119,29 @@ function OrderConfirmationDialog({ open, onClose, cartItems, handleGetCart, curr
                 <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, textTransform: 'uppercase', fontSize: '18px' }}>
                   Phương thức vận chuyển
                 </Typography>
-                <Box sx={{ border: '1px solid #f6831f', padding: 2, borderRadius: 2 }}>
+                <Box sx={{ pl: 2 }}>
                   <FormControlLabel
                     value="standard"
-                    control={<Radio checked sx={{ color: '#f6831f' }} />}
-                    label="Giao hàng tiêu chuẩn (3-5 ngày)"
-                    sx={{ color: '#f6831f' }}
+                    control={
+                      <Radio
+                        checked={shippingMethod === 'standard'}
+                        onChange={() => setShippingMethod('standard')}
+                        sx={{ color: '#f6831f' }}
+                      />
+                    }
+                    label="Giao hàng tiêu chuẩn (25,000đ)"
                   />
-                  <Typography sx={{ fontSize: '0.875rem', mt: 1, color: '#555' }}>
-                    Dự kiến giao hàng từ 2-5 ngày, trừ Chủ Nhật, Lễ Tết. (Miễn phí giao hàng toàn quốc).
-                  </Typography>
+                  <FormControlLabel
+                    value="express"
+                    control={
+                      <Radio
+                        checked={shippingMethod === 'express'}
+                        onChange={() => setShippingMethod('express')}
+                        sx={{ color: '#f6831f' }}
+                      />
+                    }
+                    label="Giao hàng nhanh (33,000đ)"
+                  />
                 </Box>
               </FormControl>
 

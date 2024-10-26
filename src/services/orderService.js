@@ -1,7 +1,7 @@
 import axios from '~/axios';
 
 const orderService = {
-  async checkout(userId, products, isPayment) {
+  async checkout(userId, products, isPayment, shipping_method, shipping_cost) {
     if (!Array.isArray(products) || products.length === 0) {
       throw new Error('Danh sách sản phẩm không hợp lệ');
     }
@@ -10,6 +10,8 @@ const orderService = {
         userId,
         products,
         isPayment,
+        shipping_method,
+        shipping_cost,
       });
       return response.data;
     } catch (error) {

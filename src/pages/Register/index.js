@@ -22,16 +22,14 @@ function Register() {
   const passRef = useRef();
   const usernameRef = useRef();
   const confirmPassRef = useRef();
-  const addressRef = useRef();
   const phoneRef = useRef();
   const avatarRef = useRef();
-  const dobRef = useRef(); // Reference for date of birth
+  const dobRef = useRef();
 
   const [emailInput, setEmail] = useState('');
   const [passInput, setPassInput] = useState('');
   const [username, setUsername] = useState('');
   const [confirmPassInput, setConfirmPassInput] = useState('');
-  const [addressInput, setAddressInput] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
@@ -40,7 +38,6 @@ function Register() {
   const [errClassPass, SetErrClassPass] = useState(false);
   const [errClassUsername, setErrClassUsername] = useState(false);
   const [errClassConfirmPass, setErrClassConfirmPass] = useState(false);
-  const [errClassAddress, setErrClassAddress] = useState(false);
   const [errClassPhone, setErrClassPhone] = useState(false);
   const [errClassDob, setErrClassDob] = useState(false);
 
@@ -64,10 +61,7 @@ function Register() {
         setConfirmPassInput(e.target.value);
         setErrClassConfirmPass(false);
         break;
-      case 'address':
-        setAddressInput(e.target.value);
-        setErrClassAddress(false);
-        break;
+
       case 'phone':
         setPhoneInput(e.target.value);
         setErrClassPhone(false);
@@ -117,11 +111,6 @@ function Register() {
       setErrClassPhone(true);
       phoneRef.current.focus();
       return;
-    } else if (!addressInput) {
-      toast.error('Vui lòng nhập địa chỉ.');
-      setErrClassAddress(true);
-      addressRef.current.focus();
-      return;
     } else if (!dobInput) {
       toast.error('Vui lòng nhập ngày sinh.');
       setErrClassDob(true);
@@ -143,9 +132,8 @@ function Register() {
     formData.append('username', username);
     formData.append('email', emailInput);
     formData.append('password', passInput);
-    formData.append('address', addressInput);
     formData.append('phone', phoneInput);
-    formData.append('date_of_birth', dobInput); // Add date of birth to form data
+    formData.append('date_of_birth', dobInput);
     formData.append('avatar', avatarFile);
     try {
       setIsLoader(true);
@@ -223,20 +211,6 @@ function Register() {
                 fullWidth
               />
             </FormControl>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Địa chỉ"
-                value={addressInput}
-                inputRef={addressRef}
-                error={errClassAddress}
-                onChange={(e) => handleChange(e, 'address')}
-                required
-                id="address"
-                variant="outlined"
-                fullWidth
-              />
-            </FormControl>
-
             <FormControl fullWidth margin="normal">
               <TextField
                 label="Ngày sinh"

@@ -12,9 +12,6 @@ import Address from '~/pages/Address';
 import Introduce from '~/pages/Introduce';
 import Contact from '~/pages/Contact';
 import Policy from '~/pages/Policy';
-import Dashboard from '~/pages/Admin/Dashboard';
-import LoginAdmin from '~/pages/Admin/LoginAdmin';
-import ProductsManagement from '~/pages/Admin/Product';
 
 const publicRoutes = [
   {
@@ -71,21 +68,4 @@ const publicRoutes = [
   },
 ];
 
-const adminRoutes = [
-  {
-    path: '/admin/dashboard',
-    component: Dashboard,
-    isAdmin: true,
-  },
-  {
-    path: '/admin/products-management',
-    component: ProductsManagement,
-    isAdmin: true,
-  },
-  {
-    path: '/admin/login',
-    component: LoginAdmin,
-  },
-];
-
-export { publicRoutes, adminRoutes };
+export { publicRoutes };

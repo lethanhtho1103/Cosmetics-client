@@ -30,7 +30,7 @@ const authService = {
       });
       return res.data;
     } catch (error) {
-      console.error('API error:', error.response?.data || error.message);
+      console.error('API error:', error);
       throw error;
     }
   },

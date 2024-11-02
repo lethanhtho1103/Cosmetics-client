@@ -3,10 +3,11 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
 import MicIcon from '@mui/icons-material/Mic';
-import MicOffIcon from '@mui/icons-material/MicOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 import productService from '~/services/productService';
@@ -16,17 +17,22 @@ import { baseUrl } from '~/axios';
 export default function Search() {
   const [value, setValue] = useState('');
   const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
   const debouncedValue = useDebounce(value, 500);
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [speechTimeout, setSpeechTimeout] = useState(null); // Thêm trạng thái cho timer
+  const [speechTimeout, setSpeechTimeout] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleGetProductByName = async (nameProduct) => {
     try {
       if (nameProduct) {
         const res = await productService.getProductByName({ nameProduct });
         setProducts(res.data || []);
+        if (res.data.length === 0) {
+          setSnackbarOpen(true);
+        }
       } else {
         setProducts([]);
       }
@@ -42,25 +48,27 @@ export default function Search() {
 
   useEffect(() => {
     if (transcript) {
-      setValue(transcript);
-      handleGetProductByName(transcript);
-      // Reset timer khi có kết quả mới từ transcript
+      const newWords = transcript.split(' ').filter((word) => !value.includes(word));
+      if (newWords.length > 0) {
+        setValue((prevValue) => `${prevValue} ${newWords.join(' ')}`.trim());
+        handleGetProductByName(`${value} ${newWords.join(' ')}`.trim());
+      }
       if (speechTimeout) {
         clearTimeout(speechTimeout);
       }
-      // Bắt đầu timer mới
       setSpeechTimeout(
         setTimeout(() => {
-          setIsSpeaking(false); // Ngắt nói nếu không có âm thanh trong 1 giây
+          setIsSpeaking(false);
+          stopListening();
         }, 2000),
-      ); // Thay đổi khoảng thời gian nếu cần
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
 
   const startListening = () => {
     resetTranscript();
-    SpeechRecognition.startListening();
+    SpeechRecognition.startListening({ continuous: true });
     setIsListening(true);
     setIsSpeaking(true);
   };
@@ -70,17 +78,38 @@ export default function Search() {
     setIsListening(false);
   };
 
+  const handleMicClick = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <div>
       <Autocomplete
-        freeSolo
         inputValue={value}
         onInputChange={(event, newValue) => {
           setValue(newValue);
+          setOpen(true);
         }}
-        options={products}
+        options={products.length > 0 ? products : []}
         getOptionLabel={(option) => option?.name || ''}
-        noOptionsText="Không có kết quả phù hợp"
+        noOptionsText="Không tìm thấy kết quả"
+        open={open}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            handleGetProductByName(value);
+          }
+        }}
         renderOption={(props, option) => (
           <li {...props} key={option?.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Link
@@ -114,10 +143,23 @@ export default function Search() {
               ...params.InputProps,
               startAdornment: (
                 <InputAdornment position="start">
-                  <IconButton edge="start" onClick={isListening ? stopListening : startListening}>
-                    {isSpeaking ? <MicIcon /> : <MicOffIcon />}
+                  <IconButton edge="start" onClick={handleMicClick}>
+                    {isSpeaking ? (
+                      <Box
+                        sx={{
+                          width: 8,
+                          height: 8,
+                          backgroundColor: 'red',
+                          borderRadius: '50%',
+                          marginLeft: '5px',
+                          animation: 'blink 1s infinite',
+                        }}
+                      />
+                    ) : (
+                      <MicIcon />
+                    )}
                   </IconButton>
-                  <IconButton edge="end">
+                  <IconButton edge="end" onClick={() => handleGetProductByName(value)}>
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>
@@ -147,7 +189,18 @@ export default function Search() {
               border: 'none',
             },
           },
+          '@keyframes blink': {
+            '0%': { opacity: 1 },
+            '50%': { opacity: 0 },
+            '100%': { opacity: 1 },
+          },
         }}
+      />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message="Không tìm thấy sản phẩm nào."
       />
     </div>
   );

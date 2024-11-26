@@ -199,7 +199,7 @@ function Product() {
                   </AccordionDetails>
                 </Accordion>
 
-                <Accordion className="custom-accordion">
+                {/* <Accordion className="custom-accordion">
                   <AccordionSummary
                     sx={{ fontWeight: '700', textTransform: 'uppercase' }}
                     expandIcon={<ExpandMoreIcon />}
@@ -223,7 +223,7 @@ function Product() {
                       />
                     ))}
                   </AccordionDetails>
-                </Accordion>
+                </Accordion> */}
 
                 <Accordion className="custom-accordion">
                   <AccordionSummary
@@ -268,7 +268,6 @@ function Product() {
   );
 }
 
-// FilterItem component for display of selected filters
 const FilterItem = ({ label, onRemove }) => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0' }}>
     <Typography variant="body2">{label}</Typography>
@@ -278,7 +277,6 @@ const FilterItem = ({ label, onRemove }) => (
   </Box>
 );
 
-// PriceInput component for price range inputs
 const PriceInput = ({ value, onChange }) => (
   <TextField
     variant="outlined"

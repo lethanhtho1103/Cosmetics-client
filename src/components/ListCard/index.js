@@ -23,6 +23,7 @@ function ListCard({ cardCount = 5, products }) {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
+  console.log(products)
 
   return (
     <Box sx={{ marginTop: '24px' }}>
@@ -33,8 +34,8 @@ function ListCard({ cardCount = 5, products }) {
           const image = product?.product_id?.image || product?.image;
           const price = product?.product_id?.price || product?.price;
           const discount =
-            (product?.promotion_id?.status === 'active' && product?.promotion_id?.discount_value) ||
-            product?.promotion?.discount_value;
+            (product?.promotion_id?.status === 'active' && product?.promotion_id?.discount_value) ?
+            product?.promotion?.discount_value : 0;
           const average_star = product?.product_id?.average_star || product?.average_star;
 
           return (

@@ -88,7 +88,7 @@ function OrderHistory() {
       case 1:
         return orders.filter((order) => order.status === 'pending');
       case 2:
-        return orders.filter((order) => order.status === 'accepted');
+        return orders.filter((order) => order.status === 'shipped');
       case 3:
         return orders.filter((order) => order.status === 'delivered');
       case 4:
@@ -304,7 +304,7 @@ function OrderHistory() {
                           </Button>
                         )}
 
-                        {order?.status === 'accepted' && (
+                        {order?.status === 'shipped' && (
                           <Button
                             variant="contained"
                             color="primary"

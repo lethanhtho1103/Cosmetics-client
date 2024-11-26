@@ -63,7 +63,7 @@ function Account() {
                   <Link to="/account/orders" className={`${location.pathname === '/account/orders' ? 'active' : ''}`}>
                     <strong>
                       <InventoryOutlinedIcon />
-                      Quản lý đơn hàng
+                      Đơn mua
                     </strong>
                   </Link>
                 </li>

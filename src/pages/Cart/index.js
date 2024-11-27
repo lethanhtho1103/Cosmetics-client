@@ -61,19 +61,16 @@ function Cart() {
       newCartItems[index].quantity = newQuantity;
       setCartItems(newCartItems);
 
-      // Debounce the API call to handle rapid clicks
       debouncedUpdateCart(userId, productId, newQuantity);
     } else {
       setLoading(false);
     }
 
-    // Clear any existing timeout to ensure only one is active at a time
     if (loadingTimeoutRef.current) {
       clearTimeout(loadingTimeoutRef.current);
     }
 
-    // Set a new timeout for loading state to ensure spinner visibility
-    loadingTimeoutRef.current = setTimeout(() => setLoading(false), 500); // Ensure spinner is visible for at least 500ms
+    loadingTimeoutRef.current = setTimeout(() => setLoading(false), 500);
   };
 
   const handleSelectAll = () => {
@@ -142,7 +139,7 @@ function Cart() {
                   {cartItems?.map((item, index) => {
                     const price =
                       item?.product_id?.promotion?.discount_value > 0 && item?.product_id?.promotion.status === 'active'
-                        ? (item?.product_id?.promotion?.discount_value * item?.product_id?.price) / 100
+                        ? item?.product_id?.price - (item?.product_id?.promotion?.discount_value * item?.product_id?.price) / 100
                         : item?.product_id?.price;
                     return (
                       <Box key={item?.product_id?._id} className="cart-item">
@@ -174,11 +171,15 @@ function Cart() {
                               <span>{item?.quantity}</span>
                               <button
                                 onClick={() => handleQuantityChange(item?.product_id?._id, index, 1)}
-                                disabled={loading}
+                                disabled={loading || item.quantity >= item.product_id.quantity}
                               >
                                 +
                               </button>
+                              
                             </Box>
+                            <Typography sx={{ color: '#8f8d8a', fontSize: "12px", fontWeight: 400 }}>
+                              {item.quantity > item.product_id.quantity ? `Số lượng sản phẩm (${item.product_id.quantity}) cửa hàng không đủ` : ""}
+                            </Typography>
                           </Box>
                         </Box>
                         <Box className="cart-item-actions">
@@ -193,6 +194,7 @@ function Cart() {
                               control={<Checkbox checked={item?.selected} onChange={() => handleSelectItem(index)} />}
                               label=""
                               sx={{ marginRight: 0 }}
+                              disabled={item.quantity > item.product_id.quantity}
                             />
                             <Box className="remove-item" onClick={() => handleDeleteCart(item?.product_id?._id)}>
                               Xóa

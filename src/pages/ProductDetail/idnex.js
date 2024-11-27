@@ -50,16 +50,21 @@ function ProductDetail() {
   }, [quantity]);
 
   const handleAddToCart = useCallback(
-    async (productId, quantity = 1) => {
-      if (currentUser) {
-        const userId = currentUser._id;
-        const res = await cartService.addToCart(userId, productId, quantity);
-        const cartRes = await cartService.getCartByUserId({ userId });
-        updateCart(cartRes?.data);
-        toast.success(res?.message);
-      } else {
-        navigate('/login');
+    async (productId, quantity = 1, quantityProduct) => {
+      if(quantity > quantityProduct) {
+        toast.info("Số lượng sản phẩm của cửa hàng không đủ.")
+      }else {
+        if (currentUser) {
+          const userId = currentUser._id;
+          const res = await cartService.addToCart(userId, productId, quantity);
+          const cartRes = await cartService.getCartByUserId({ userId });
+          updateCart(cartRes?.data);
+          toast.success(res?.message);
+        } else {
+          navigate('/login');
+        }
       }
+     
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser, navigate, quantity],
@@ -157,11 +162,14 @@ function ProductDetail() {
                   <Typography className="product-brand">
                     Hạn sử dụng: <strong>{productDetail?.expiry} tháng</strong>
                   </Typography>
+                  <Typography className="product-brand">
+                    Sản phẩm: <strong>{productDetail?.quantity}</strong>
+                  </Typography>
                 </Box>
                 <Box className="price-box-product">
                   {productDetail?.promotion?.discount_value && productDetail?.promotion?.status === 'active' ? (
                     <span className="special-price">
-                      {formatNumber((productDetail?.price * productDetail?.promotion?.discount_value) / 100)}
+                      {formatNumber(productDetail?.price - (productDetail?.price * productDetail?.promotion?.discount_value/ 100))}
                     </span>
                   ) : (
                     <span className="special-price">{formatNumber(productDetail?.price)}</span>
@@ -193,7 +201,8 @@ function ProductDetail() {
                   <Button
                     variant="contained"
                     className="add-to-cart-btn"
-                    onClick={() => handleAddToCart(productDetail?._id, quantity)}
+                    onClick={() => handleAddToCart(productDetail?._id, quantity, productDetail?.quantity)}
+                    disabled={productDetail?.quantity <= 0}
                   >
                     <ShoppingCartIcon fontSize="small" className="cart-icon" />
                     Thêm vào giỏ hàng

@@ -23,7 +23,6 @@ function ListCard({ cardCount = 5, products }) {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-  console.log(products)
 
   return (
     <Box sx={{ marginTop: '24px' }}>
@@ -35,9 +34,8 @@ function ListCard({ cardCount = 5, products }) {
           const price = product?.product_id?.price || product?.price;
           const discount =
             (product?.promotion_id?.status === 'active' && product?.promotion_id?.discount_value) ?
-            product?.promotion?.discount_value : 0;
+            product?.promotion_id?.discount_value : 0;
           const average_star = product?.product_id?.average_star || product?.average_star;
-
           return (
             <Card
               className={`product-item ${index % cardCount === 0 ? 'first-in-row' : ''} ${
@@ -71,7 +69,7 @@ function ListCard({ cardCount = 5, products }) {
                   </Box>
                   <Box className="price-box">
                     {discount > 0 ? (
-                      <span className="special-price">{formatNumber((price * discount) / 100)}</span>
+                      <span className="special-price">{formatNumber(price - (price * discount) / 100)}</span>
                     ) : (
                       <span className="special-price">{formatNumber(price)}</span>
                     )}

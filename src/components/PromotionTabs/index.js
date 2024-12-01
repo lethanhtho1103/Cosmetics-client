@@ -55,8 +55,10 @@ function BasicTabs({ promotions }) {
   }
 
   const handleGetAllProductByPromotionId = async (promotionId) => {
-    const res = await promotionService.getAllProductByPromotionId(promotionId);
-    setProducts(res);
+    if(promotionId) {
+      const res = await promotionService.getAllProductByPromotionId(promotionId);
+      setProducts(res);
+    }
   };
 
   const handleChange = (event, newValue) => {
@@ -89,15 +91,20 @@ function BasicTabs({ promotions }) {
           ))}
         </Tabs>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 className="">{`Chương trình diễn ra từ ${formatDateRangeFromISO(
+        {
+          products ? <h3 className="">{`Chương trình diễn ra từ ${formatDateRangeFromISO(
             products[0]?.promotion_id.start_date,
             products[0]?.promotion_id.end_date,
-          )}`}</h3>
-          <Box className="show-all">
+          )}`}</h3> : <h3>Chưa có sản phẩm khuyến mãi</h3>
+        }
+          
+          { 
+            products &&  <Box className="show-all">
             <Link href="#">
               Xem tất cả <KeyboardArrowRight />
             </Link>
           </Box>
+          }
         </Box>
       </Box>
 
